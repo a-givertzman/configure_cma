@@ -1,0 +1,14 @@
+{
+    "HPU.Pump1.Alarm": {
+        "class": 1
+    },
+    "HPU.Pump2.Alarm": {
+        "class": 1
+    },
+    "HPU.EmergencyHPU.Alarm": {
+        "class": 1
+    },
+    "HPU.OilTemp": {
+        "class": 1
+    }
+}
