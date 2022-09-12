@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class_value.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class_value.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

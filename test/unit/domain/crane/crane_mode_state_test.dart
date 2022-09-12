@@ -1,7 +1,7 @@
-import 'package:crane_monitoring_app/domain/core/entities/state_constatnts.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_wave_height_level.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_winch_mode_value.dart';
+import 'package:configure_cma/domain/core/entities/state_constatnts.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/crane/crane_wave_height_level.dart';
+import 'package:configure_cma/domain/crane/crane_winch_mode_value.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

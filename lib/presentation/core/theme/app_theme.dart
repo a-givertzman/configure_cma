@@ -1,6 +1,6 @@
 
-import "package:crane_monitoring_app/presentation/core/theme/dark_theme.dart" as dark_theme;
-import "package:crane_monitoring_app/presentation/core/theme/light_theme.dart" as light_theme;
+import "package:configure_cma/presentation/core/theme/dark_theme.dart" as dark_theme;
+import "package:configure_cma/presentation/core/theme/light_theme.dart" as light_theme;
 import "package:flutter/material.dart";
 
 enum AppTheme {

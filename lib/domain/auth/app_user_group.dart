@@ -1,6 +1,6 @@
 
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
 
 /// Константы групп пользователей в системе
 class UserGroupList {

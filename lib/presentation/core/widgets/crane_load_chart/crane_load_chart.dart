@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status_value.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/swl/swl_data.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/crane_load_chart/crane_load_point_painter.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_status_value.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/swl/swl_data.dart';
+import 'package:configure_cma/presentation/core/widgets/crane_load_chart/crane_load_point_painter.dart';
 import 'package:flutter/material.dart';
 
 /// диаграмма нагрузки крана

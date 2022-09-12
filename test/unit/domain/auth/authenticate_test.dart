@@ -1,10 +1,10 @@
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
-import 'package:crane_monitoring_app/domain/auth/authenticate.dart';
-import 'package:crane_monitoring_app/domain/auth/user_password.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_request.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/app_data_source.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/authenticate.dart';
+import 'package:configure_cma/domain/auth/user_password.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
+import 'package:configure_cma/infrastructure/api/api_request.dart';
+import 'package:configure_cma/infrastructure/datasource/app_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';

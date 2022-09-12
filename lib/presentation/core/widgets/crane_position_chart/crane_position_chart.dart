@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/crane_position_chart/crane_position_painter.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/presentation/core/widgets/crane_position_chart/crane_position_painter.dart';
 import 'package:flutter/material.dart';
 
 ///

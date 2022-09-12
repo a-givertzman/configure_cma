@@ -1,6 +1,6 @@
-import 'package:crane_monitoring_app/domain/auth/user_login.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/presentation/auth/register_user/widgets/register_user_form.dart';
+import 'package:configure_cma/domain/auth/user_login.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/presentation/auth/register_user/widgets/register_user_form.dart';
 import 'package:flutter/material.dart';
 
 class RegisterUserPage extends StatelessWidget {

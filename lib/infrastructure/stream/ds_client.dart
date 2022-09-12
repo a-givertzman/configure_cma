@@ -1,10 +1,10 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_type.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_timestamp.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/stream_mearged.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/domain/core/entities/ds_timestamp.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
+import 'package:configure_cma/infrastructure/stream/stream_mearged.dart';
 
 
 abstract class DsClient {

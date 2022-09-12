@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class_value.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class_value.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
 
 
 ///

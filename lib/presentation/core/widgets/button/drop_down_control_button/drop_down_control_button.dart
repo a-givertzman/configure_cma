@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_stream_extract.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_point_path.dart';
-import 'package:crane_monitoring_app/domain/core/entities/network_operation_state.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_send.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_stream_extract.dart';
+import 'package:configure_cma/domain/core/entities/ds_point_path.dart';
+import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/infrastructure/stream/ds_send.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 

@@ -1,7 +1,7 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/swl/swl_data.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/crane_load_chart/crane_load_chart.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/crane_position_chart/crane_position_chart.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/swl/swl_data.dart';
+import 'package:configure_cma/presentation/core/widgets/crane_load_chart/crane_load_chart.dart';
+import 'package:configure_cma/presentation/core/widgets/crane_position_chart/crane_position_chart.dart';
 import 'package:flutter/material.dart';
 
 ///

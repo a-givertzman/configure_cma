@@ -1,12 +1,12 @@
 
-import 'package:crane_monitoring_app/domain/auth/app_user_group.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/sps_icon_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/status_indicator_widget.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user_group.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/core/widgets/sps_icon_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/status_indicator_widget.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class DiagnosticBody extends StatelessWidget {

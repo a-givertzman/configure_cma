@@ -1,11 +1,11 @@
 import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
-import 'package:crane_monitoring_app/domain/auth/user_login.dart';
-import 'package:crane_monitoring_app/domain/auth/user_password.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/core/timers/count_timer.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/user_login.dart';
+import 'package:configure_cma/domain/auth/user_password.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/timers/count_timer.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 /// Класс проверяет пользователя по паролю

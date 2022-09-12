@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/data_collection.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_set.dart';
+import 'package:configure_cma/domain/core/entities/data_collection.dart';
+import 'package:configure_cma/infrastructure/datasource/data_set.dart';
 
 /// Класс реализует список элементов T = [DsDataPoint] для [EventListDataSource]
 /// Список закупок для отображения в катологе 

@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
 
 ///
 class AuthResult {

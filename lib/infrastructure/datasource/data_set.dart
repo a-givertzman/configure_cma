@@ -1,9 +1,9 @@
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_handle_error.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_request.dart';
-import 'package:crane_monitoring_app/infrastructure/api/json_to.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/api_handle_error.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
+import 'package:configure_cma/infrastructure/api/api_request.dart';
+import 'package:configure_cma/infrastructure/api/json_to.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
 
 class DataSet<T> {
   static const _debug = false;

@@ -1,6 +1,6 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_point_path.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/translate/app_lang.dart';
+import 'package:configure_cma/domain/core/entities/ds_point_path.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_lang.dart';
 // ignore_for_file: avoid_classes_with_only_static_members
 
 class EventText {

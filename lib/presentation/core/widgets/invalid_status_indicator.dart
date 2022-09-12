@@ -1,6 +1,6 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 ///

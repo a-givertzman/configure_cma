@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:flutter/services.dart';
 
 class SwlData {

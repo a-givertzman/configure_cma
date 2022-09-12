@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
 
 ///
 /// Хранит метку времени 

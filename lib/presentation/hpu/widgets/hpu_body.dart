@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_point_path.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/bool_color_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/circular_bar_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/common_container_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/invalid_status_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/linear_bar_indicator_v1.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/status_indicator_widget.dart';
-import 'package:crane_monitoring_app/presentation/hpu/widgets/hpu_double_pump_widget.dart';
-import 'package:crane_monitoring_app/presentation/hpu/widgets/hpu_pump_widget.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_send.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/entities/ds_point_path.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/widgets/bool_color_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/circular_bar_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/common_container_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/invalid_status_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/linear_bar_indicator_v1.dart';
+import 'package:configure_cma/presentation/core/widgets/status_indicator_widget.dart';
+import 'package:configure_cma/presentation/hpu/widgets/hpu_double_pump_widget.dart';
+import 'package:configure_cma/presentation/hpu/widgets/hpu_pump_widget.dart';
+import 'package:configure_cma/infrastructure/stream/ds_send.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class HpuBody extends StatelessWidget {

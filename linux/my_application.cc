@@ -40,11 +40,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "crane_monitoring_app");
+    gtk_header_bar_set_title(header_bar, "configure_cma");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "crane_monitoring_app");
+    gtk_window_set_title(window, "configure_cma");
   }
 
   // gtk_window_fullscreen(GTK_WINDOW(window));

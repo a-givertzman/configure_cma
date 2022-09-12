@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "crane_monitoring_app" "\0"
+            VALUE "FileDescription", "configure_cma" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "crane_monitoring_app" "\0"
+            VALUE "InternalName", "configure_cma" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "crane_monitoring_app.exe" "\0"
-            VALUE "ProductName", "crane_monitoring_app" "\0"
+            VALUE "OriginalFilename", "configure_cma.exe" "\0"
+            VALUE "ProductName", "configure_cma" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

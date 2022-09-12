@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/auth/app_user_group.dart';
+import 'package:configure_cma/domain/auth/app_user_group.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

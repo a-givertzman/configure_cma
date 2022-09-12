@@ -1,4 +1,4 @@
-# crane_monitoring_app
+# configure_cma
 
 A new Flutter project.
 

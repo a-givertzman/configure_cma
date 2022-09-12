@@ -1,10 +1,10 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_type.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_point_path.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_timestamp.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
+import 'package:configure_cma/domain/core/entities/ds_point_path.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/domain/core/entities/ds_timestamp.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 
 ///
 /// Sends value of type [T] to the DataServer

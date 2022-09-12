@@ -1,6 +1,6 @@
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/button/control_button/control_button_indicator.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/presentation/core/widgets/button/control_button/control_button_indicator.dart';
 import 'package:flutter/material.dart';
 
 class ControlButton extends StatelessWidget {

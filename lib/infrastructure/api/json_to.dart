@@ -2,10 +2,10 @@
 
 import 'dart:convert';
 
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_request.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
+import 'package:configure_cma/infrastructure/api/api_request.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
 
 ///
 class JsonTo<T> {

@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/relative_value.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/entities/relative_value.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

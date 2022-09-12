@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 

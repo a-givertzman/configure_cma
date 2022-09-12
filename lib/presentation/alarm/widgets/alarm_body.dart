@@ -1,8 +1,8 @@
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/alarm/widgets/alarm_list_widget.dart';
+import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/event/event_list_data.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/alarm/widgets/alarm_list_widget.dart';
 import 'package:flutter/material.dart';
 
 class AlarmBody extends StatelessWidget {

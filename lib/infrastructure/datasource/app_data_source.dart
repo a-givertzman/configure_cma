@@ -1,7 +1,7 @@
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_request.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_set.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_source.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
+import 'package:configure_cma/infrastructure/api/api_request.dart';
+import 'package:configure_cma/infrastructure/datasource/data_set.dart';
+import 'package:configure_cma/infrastructure/datasource/data_source.dart';
 
 DataSource dataSource = DataSource({
   ///

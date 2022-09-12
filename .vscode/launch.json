@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "crane_monitoring_app",
+            "name": "configure_cma",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "crane_monitoring_app (profile mode)",
+            "name": "configure_cma (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "crane_monitoring_app (release mode)",
+            "name": "configure_cma (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_type.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
 
 
 ///

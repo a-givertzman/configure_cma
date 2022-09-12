@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 
 abstract class Failure<T> {
   static const _debug = true;

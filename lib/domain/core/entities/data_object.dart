@@ -1,8 +1,8 @@
-import 'package:crane_monitoring_app/domain/core/entities/value_object.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_set.dart';
+import 'package:configure_cma/domain/core/entities/value_object.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
+import 'package:configure_cma/infrastructure/datasource/data_set.dart';
 
 abstract class IDataObject {
   bool valid();

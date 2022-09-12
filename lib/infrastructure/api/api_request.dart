@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
 
 /// Класс реализует http запрос на url
 /// с параметрами params

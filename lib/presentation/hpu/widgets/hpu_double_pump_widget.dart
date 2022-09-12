@@ -1,12 +1,12 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/state_constatnts.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/circular_bar_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/common_container_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/drive/ac_drive_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/invalid_status_indicator.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/state_constatnts.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/widgets/circular_bar_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/common_container_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/drive/ac_drive_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/invalid_status_indicator.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

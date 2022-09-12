@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/api_params.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/api_params.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 

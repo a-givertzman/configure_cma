@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Класс реализует чтение и запись данных

@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/translate/app_lang.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/translate/app_lang.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

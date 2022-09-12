@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/stream_mearged.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/stream/stream_mearged.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

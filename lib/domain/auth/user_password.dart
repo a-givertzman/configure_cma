@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:crane_monitoring_app/domain/auth/user_password.key' as user_pass;
-import 'package:crane_monitoring_app/domain/core/entities/validation_result.dart';
+import 'package:configure_cma/domain/auth/user_password.key' as user_pass;
+import 'package:configure_cma/domain/core/entities/validation_result.dart';
 
 class UserPassword {
   final _key = user_pass.key;

@@ -1,9 +1,9 @@
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
-import 'package:crane_monitoring_app/domain/auth/auth_result.dart';
-import 'package:crane_monitoring_app/domain/auth/user_password.dart';
-import 'package:crane_monitoring_app/domain/core/local_store/local_store.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/auth_result.dart';
+import 'package:configure_cma/domain/auth/user_password.dart';
+import 'package:configure_cma/domain/core/local_store/local_store.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
 
 class Authenticate {
   static const _debug = true;

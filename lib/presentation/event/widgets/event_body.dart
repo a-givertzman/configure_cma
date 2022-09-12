@@ -1,16 +1,16 @@
-import 'package:crane_monitoring_app/domain/alarm/event_list_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data_filterd_by_date.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data_filterd_by_text.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/app_data_source.dart';
-import 'package:crane_monitoring_app/infrastructure/event/event_list_data_source.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/edit_field/date_edit_field.dart';
-import 'package:crane_monitoring_app/presentation/event/widgets/event_list_row_widget.dart';
-import 'package:crane_monitoring_app/presentation/event/widgets/position_controller.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/alarm/event_list_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/event/event_list.dart';
+import 'package:configure_cma/domain/event/event_list_data_filterd_by_date.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/event/event_list_data_filterd_by_text.dart';
+import 'package:configure_cma/infrastructure/datasource/app_data_source.dart';
+import 'package:configure_cma/infrastructure/event/event_list_data_source.dart';
+import 'package:configure_cma/presentation/core/widgets/edit_field/date_edit_field.dart';
+import 'package:configure_cma/presentation/event/widgets/event_list_row_widget.dart';
+import 'package:configure_cma/presentation/event/widgets/position_controller.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 ///

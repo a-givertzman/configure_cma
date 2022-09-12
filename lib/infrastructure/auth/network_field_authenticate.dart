@@ -1,8 +1,8 @@
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/auth/auth_result.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/presentation/core/dialogs/auth_dialog.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/auth/auth_result.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/presentation/core/dialogs/auth_dialog.dart';
 import 'package:flutter/material.dart';
 
 ///

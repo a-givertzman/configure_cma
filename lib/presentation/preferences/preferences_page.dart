@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_source.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme_switch.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/button/circular_fab_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/right_icon_widget.dart';
-import 'package:crane_monitoring_app/presentation/nav/app_nav.dart';
-import 'package:crane_monitoring_app/presentation/preferences/widgets/preferences_body.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/datasource/data_source.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
+import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/right_icon_widget.dart';
+import 'package:configure_cma/presentation/nav/app_nav.dart';
+import 'package:configure_cma/presentation/preferences/widgets/preferences_body.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 

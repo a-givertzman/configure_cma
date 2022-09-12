@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
+import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/event/event_list_data.dart';
 
 ///
 /// Хранит все активные и неактивные не сквитированные события,

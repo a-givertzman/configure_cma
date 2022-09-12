@@ -1,4 +1,4 @@
-package com.example.crane_monitoring_app
+package com.example.configure_cma
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/crane_position_chart/crane_position_chart.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/presentation/core/widgets/crane_position_chart/crane_position_chart.dart';
 import 'package:flutter/material.dart';
 
 ///

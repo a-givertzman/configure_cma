@@ -1,40 +1,31 @@
 import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/auth/auth_result.dart';
-import 'package:crane_monitoring_app/domain/auth/authenticate.dart';
-import 'package:crane_monitoring_app/domain/auth/user_login.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/auth/register_user/register_user_page.dart';
-import 'package:crane_monitoring_app/presentation/auth/sign_in/user_pass_page.dart';
-import 'package:crane_monitoring_app/presentation/auth/sign_in/widgets/user_login_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme_switch.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/in_pogress_overlay.dart';
-import 'package:crane_monitoring_app/presentation/menu/menu_page.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/auth/auth_result.dart';
+import 'package:configure_cma/domain/auth/authenticate.dart';
+import 'package:configure_cma/domain/auth/user_login.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/presentation/auth/register_user/register_user_page.dart';
+import 'package:configure_cma/presentation/auth/sign_in/user_pass_page.dart';
+import 'package:configure_cma/presentation/auth/sign_in/widgets/user_login_widget.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
+import 'package:configure_cma/presentation/core/widgets/in_pogress_overlay.dart';
+import 'package:configure_cma/presentation/menu/menu_page.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 ///
 class SignInForm extends StatefulWidget {
   final Authenticate _auth;
-  final DsClient _dsClient;
-  final EventListData<AlarmListPoint> _alarmListData;
   final AppThemeSwitch _themeSwitch;
   ///
   const SignInForm({
     Key? key,
     required Authenticate auth,
-    required DsClient dsClient,
-    required EventListData<AlarmListPoint> alarmListData,
     required AppThemeSwitch themeSwitch,
   }) : 
     _auth = auth,
-    _dsClient = dsClient,
-    _alarmListData = alarmListData,
     _themeSwitch = themeSwitch,
     super(key: key);
   ///
@@ -42,8 +33,6 @@ class SignInForm extends StatefulWidget {
   // ignore: no_logic_in_create_state
   State<SignInForm> createState() => _SignInFormState(
     auth: _auth,
-    dsClient: _dsClient,
-    alarmListData: _alarmListData,
     themeSwitch: _themeSwitch,
   );
 }
@@ -52,8 +41,6 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   static const _debug = true;
   final Authenticate _auth;
-  final DsClient _dsClient;
-  final EventListData<AlarmListPoint> _alarmListData;
   final AppThemeSwitch _themeSwitch;
   late UserLogin _userLogin;
   bool _isLoading = true;
@@ -61,13 +48,9 @@ class _SignInFormState extends State<SignInForm> {
   ///
   _SignInFormState({
     required Authenticate auth,
-    required DsClient dsClient,
-    required EventListData<AlarmListPoint> alarmListData,
     required AppThemeSwitch themeSwitch,
   }) :
     _auth = auth,
-    _dsClient = dsClient,
-    _alarmListData = alarmListData,
     _themeSwitch = themeSwitch,
     _userLogin = const UserLogin(value: '');
   ///
@@ -285,8 +268,6 @@ class _SignInFormState extends State<SignInForm> {
         MaterialPageRoute(
           builder: (context) =>  MenuPage(
             users: AppUserStacked(appUser: _auth.getUser()),
-            dsClient: _dsClient, 
-            alarmListData: _alarmListData,
             themeSwitch: _themeSwitch,
           ),
           settings: const RouteSettings(name: "/menuPage"),

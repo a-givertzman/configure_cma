@@ -5,13 +5,13 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:crane_monitoring_app/app_widget.dart';
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/infrastructure/alarm/alarm_list_data_source.dart';
-// import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client_real.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme_switch.dart';
-import 'package:crane_monitoring_app/settings/communication_settings.dart';
+import 'package:configure_cma/app_widget.dart';
+import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
+import 'package:configure_cma/infrastructure/alarm/alarm_list_data_source.dart';
+// import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
+import 'package:configure_cma/settings/communication_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

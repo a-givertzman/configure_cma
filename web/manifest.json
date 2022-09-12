@@ -1,6 +1,6 @@
 {
-    "name": "crane_monitoring_app",
-    "short_name": "crane_monitoring_app",
+    "name": "configure_cma",
+    "short_name": "configure_cma",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

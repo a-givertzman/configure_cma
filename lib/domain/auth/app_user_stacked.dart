@@ -1,8 +1,8 @@
-import 'package:crane_monitoring_app/domain/auth/app_user.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user_group.dart';
-import 'package:crane_monitoring_app/domain/core/entities/queue.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
+import 'package:configure_cma/domain/auth/app_user.dart';
+import 'package:configure_cma/domain/auth/app_user_group.dart';
+import 'package:configure_cma/domain/core/entities/queue.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
 
 class AppUserStacked extends AppUser {
   final Queue<AppUserSingle> _users = Queue<AppUserSingle>();

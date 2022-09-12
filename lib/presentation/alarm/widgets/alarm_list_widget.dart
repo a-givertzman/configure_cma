@@ -1,12 +1,12 @@
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data_filterd_by_date.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data_filterd_by_text.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/alarm/widgets/alarm_list_row_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/edit_field/date_edit_field.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
+import 'package:configure_cma/domain/event/event_list_data.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/event/event_list_data_filterd_by_date.dart';
+import 'package:configure_cma/domain/event/event_list_data_filterd_by_text.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/alarm/widgets/alarm_list_row_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/edit_field/date_edit_field.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class AlarmListWidget extends StatefulWidget {

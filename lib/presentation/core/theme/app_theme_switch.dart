@@ -1,6 +1,6 @@
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 

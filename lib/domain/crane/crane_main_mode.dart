@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/core/entities/state_constatnts.dart';
+import 'package:configure_cma/domain/core/entities/state_constatnts.dart';
 
 /// основной работы крана - значения
 enum CraneMainModeValue {

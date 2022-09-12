@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/validation_result.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
+import 'package:configure_cma/domain/core/entities/validation_result.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
 
 /// Класс хранит login пользователя
 /// метод validate() возвращает положительный ValidationResult 

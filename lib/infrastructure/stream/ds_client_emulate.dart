@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_type.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client_real.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/stream_mearged.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
+import 'package:configure_cma/infrastructure/stream/stream_mearged.dart';
 
 class DsClientEmulate extends DsClientReal{
   static const _debug = false;

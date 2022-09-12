@@ -1,4 +1,4 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
 
 ///
 /// Контейнер храняший один DsDataPoint с ID в базе данных

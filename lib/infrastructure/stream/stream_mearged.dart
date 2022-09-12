@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 
 /// Поток объединяющий события из нескольких потоков без трансформации
 class StreamMerged<T> {

@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/state_constatnts.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_active_winch_value.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_main_mode.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_wave_height_level.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_winch_mode_value.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/entities/state_constatnts.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/crane/crane_active_winch_value.dart';
+import 'package:configure_cma/domain/crane/crane_main_mode.dart';
+import 'package:configure_cma/domain/crane/crane_wave_height_level.dart';
+import 'package:configure_cma/domain/crane/crane_winch_mode_value.dart';
 
 
 ///

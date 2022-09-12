@@ -1,8 +1,8 @@
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/dps_icon_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/invalid_status_indicator.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/status_indicator_widget.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/widgets/dps_icon_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/invalid_status_indicator.dart';
+import 'package:configure_cma/presentation/core/widgets/status_indicator_widget.dart';
 import 'package:flutter/material.dart';
 
 class AcDriveWidget extends StatelessWidget {

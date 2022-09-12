@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/event/event_list_data.dart';
 import 'package:flutter/material.dart';
 
 ///

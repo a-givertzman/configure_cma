@@ -1,36 +1,30 @@
 import 'dart:io';
 
-import 'package:crane_monitoring_app/domain/alarm/alarm_list_point.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/event/event_list_data.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme_switch.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/button/circular_fab_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/right_icon_widget.dart';
-import 'package:crane_monitoring_app/presentation/menu/widgets/menu_body.dart';
-import 'package:crane_monitoring_app/presentation/nav/app_nav.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/event/event_list_data.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
+import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/right_icon_widget.dart';
+import 'package:configure_cma/presentation/menu/widgets/menu_body.dart';
+import 'package:configure_cma/presentation/nav/app_nav.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 ///
 /// Главное меню приложения
 class MenuPage extends StatefulWidget {
-  final DsClient _dsClient;
-  final EventListData<AlarmListPoint> _alarmListData;
   final AppUserStacked _users;
   final AppThemeSwitch _themeSwitch;
   ///
   const MenuPage({
     Key? key,
-    required DsClient dsClient,
-    required EventListData<AlarmListPoint> alarmListData,
     required AppUserStacked users,
     required AppThemeSwitch themeSwitch,
   }) : 
-    _dsClient = dsClient,
-    _alarmListData = alarmListData,
     _users = users,
     _themeSwitch = themeSwitch,
     super(key: key);
@@ -38,8 +32,6 @@ class MenuPage extends StatefulWidget {
   @override
   // ignore: no_logic_in_create_state
   State<MenuPage> createState() => _MenuPageState(
-    dsClient: _dsClient,
-    alarmListData: _alarmListData,
     users: _users,
     themeSwitch: _themeSwitch,
   );
@@ -48,19 +40,13 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   static const _debug = true;
-  final DsClient _dsClient;
-  final EventListData<AlarmListPoint> _alarmListData;
   final AppUserStacked _users;
   final AppThemeSwitch _themeSwitch;
   ///
   _MenuPageState({
-    required DsClient dsClient,
-    required EventListData<AlarmListPoint> alarmListData,
     required AppUserStacked users,
     required AppThemeSwitch themeSwitch,
   }) :
-    _dsClient = dsClient,
-    _alarmListData = alarmListData,
     _users = users,
     _themeSwitch = themeSwitch,
     super();
@@ -111,8 +97,6 @@ class _MenuPageState extends State<MenuPage> {
         // appBar: _appBar(userGroup),
         body: MenuBody(
           users: _users,
-          dsClient: _dsClient,
-          alarmListData: _alarmListData,
           themeSwitch: _themeSwitch,
         ),
       ),

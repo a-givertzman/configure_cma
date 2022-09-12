@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/core/entities/value_object.dart';
-import 'package:crane_monitoring_app/domain/core/entities/value_string.dart';
+import 'package:configure_cma/domain/core/entities/value_object.dart';
+import 'package:configure_cma/domain/core/entities/value_string.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

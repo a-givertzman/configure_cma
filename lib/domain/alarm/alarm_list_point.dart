@@ -1,5 +1,5 @@
-import 'package:crane_monitoring_app/domain/alarm/event_list_point.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_point.dart';
+import 'package:configure_cma/domain/alarm/event_list_point.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
 
 ///
 /// Контейнер храняший один DsDataPoint со статусом [active]

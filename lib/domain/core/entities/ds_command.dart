@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_class.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_data_type.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_status.dart';
-import 'package:crane_monitoring_app/domain/core/entities/ds_timestamp.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_class.dart';
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
+import 'package:configure_cma/domain/core/entities/ds_status.dart';
+import 'package:configure_cma/domain/core/entities/ds_timestamp.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 
 ///
 /// Команда управления передаваемая в DataServer

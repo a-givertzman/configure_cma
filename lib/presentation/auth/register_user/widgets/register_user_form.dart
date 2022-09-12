@@ -1,13 +1,13 @@
 import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:crane_monitoring_app/domain/auth/app_user_group.dart';
-import 'package:crane_monitoring_app/domain/auth/register_user.dart';
-import 'package:crane_monitoring_app/domain/auth/user_login.dart';
-import 'package:crane_monitoring_app/domain/auth/user_password.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/app_data_source.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/in_pogress_overlay.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user_group.dart';
+import 'package:configure_cma/domain/auth/register_user.dart';
+import 'package:configure_cma/domain/auth/user_login.dart';
+import 'package:configure_cma/domain/auth/user_password.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/infrastructure/datasource/app_data_source.dart';
+import 'package:configure_cma/presentation/core/widgets/in_pogress_overlay.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 ///

@@ -1,11 +1,11 @@
 
-import 'package:crane_monitoring_app/domain/auth/app_user_group.dart';
-import 'package:crane_monitoring_app/domain/core/entities/data_object.dart';
-import 'package:crane_monitoring_app/domain/core/entities/value_string.dart';
-import 'package:crane_monitoring_app/domain/core/error/failure.dart';
-import 'package:crane_monitoring_app/domain/translate/app_text.dart';
-import 'package:crane_monitoring_app/infrastructure/api/response.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_set.dart';
+import 'package:configure_cma/domain/auth/app_user_group.dart';
+import 'package:configure_cma/domain/core/entities/data_object.dart';
+import 'package:configure_cma/domain/core/entities/value_string.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
+import 'package:configure_cma/domain/translate/app_text.dart';
+import 'package:configure_cma/infrastructure/api/response.dart';
+import 'package:configure_cma/infrastructure/datasource/data_set.dart';
 
 ///
 abstract class AppUser {

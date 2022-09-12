@@ -1,34 +1,31 @@
 import 'dart:io';
 
-import 'package:crane_monitoring_app/domain/auth/app_user_stacked.dart';
-import 'package:crane_monitoring_app/domain/core/log/log.dart';
-import 'package:crane_monitoring_app/domain/crane/crane_mode_state.dart';
-import 'package:crane_monitoring_app/infrastructure/datasource/data_source.dart';
-import 'package:crane_monitoring_app/infrastructure/stream/ds_client.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme.dart';
-import 'package:crane_monitoring_app/presentation/core/theme/app_theme_switch.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/button/circular_fab_widget.dart';
-import 'package:crane_monitoring_app/presentation/core/widgets/right_icon_widget.dart';
-import 'package:crane_monitoring_app/presentation/home/widgets/home_body.dart';
-import 'package:crane_monitoring_app/presentation/nav/app_nav.dart';
-import 'package:crane_monitoring_app/settings/common_settings.dart';
+import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/crane/crane_mode_state.dart';
+import 'package:configure_cma/infrastructure/datasource/data_source.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
+import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
+import 'package:configure_cma/presentation/core/widgets/right_icon_widget.dart';
+import 'package:configure_cma/presentation/home/widgets/home_body.dart';
+import 'package:configure_cma/presentation/nav/app_nav.dart';
+import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 
 class HomePage extends StatefulWidget {
   final DataSource dataSource;
   final AppUserStacked _users;
-  final DsClient _dsClient;
   final AppThemeSwitch _themeSwitch;
   ///
   const HomePage({
     Key? key,
     required this.dataSource,
     required AppUserStacked users,
-    required DsClient dsClient,
     required AppThemeSwitch themeSwitch,
   }) : 
-    _dsClient = dsClient,
     _users = users,
     _themeSwitch = themeSwitch,
     super(key: key);
@@ -36,7 +33,6 @@ class HomePage extends StatefulWidget {
   @override
   // ignore: no_logic_in_create_state
   State<HomePage> createState() => _HomePageState(
-    dsClient: _dsClient,
     users: _users,
     themeSwitch: _themeSwitch,
   );
@@ -45,18 +41,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const _debug = true;
-  final DsClient _dsClient;
   final AppUserStacked _users;
   final AppThemeSwitch _themeSwitch;
   // late List<String> _statusList;
   // late ViewFilter _viewFilter;
   ///
   _HomePageState({
-    required DsClient dsClient,
     required AppUserStacked users,
     required AppThemeSwitch themeSwitch,
   }) :
-    _dsClient = dsClient,
     _users = users,
     _themeSwitch = themeSwitch,
     super();
@@ -105,19 +98,6 @@ class _HomePageState extends State<HomePage> {
         ),
         body: HomeBody(
           users: _users,
-          dsClient: _dsClient,
-          craneModeState: CraneModeState(
-            stream: _dsClient.streamMerged([
-              'CraneMode.MainMode',
-              'CraneMode.ActiveWinch',
-              'CraneMode.Winch1Mode',
-              'CraneMode.Winch2Mode',
-              'CraneMode.Winch3Mode',
-              'CraneMode.WaveHeightLevel',
-              'ConstantTension.Level',
-              // 'CraneMode.constantTensionActive', ???
-            ]),
-          ),
         ),
       ),
     );
@@ -171,7 +151,6 @@ class _HomePageState extends State<HomePage> {
           right: 0,
           child: RightIconWidget(
             users: _users,
-            dsClient: _dsClient,
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 
-import 'package:crane_monitoring_app/presentation/core/theme/color_utils.dart';
+import 'package:configure_cma/presentation/core/theme/color_utils.dart';
 import 'package:flutter/material.dart';
 
 const canvasColor = Color(0xffFFFFFF);
