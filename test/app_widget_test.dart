@@ -28,15 +28,6 @@ void main() {
     await tester.pumpWidget(
       AppWidget(
           themeSwitch: _appThemeSwitch,
-          dsClient: _dsClient, 
-          alarmListData: AlarmListDataSource<AlarmListPoint>(
-            stream: _dsClient.streamMerged([
-              'HPU.Pump1.Alarm',
-              'HPU.Pump2.Alarm',
-              'HPU.EmergencyHPU.Alarm',
-              'HPU.OilTemp',
-            ]),
-          ),
       ),
     );
 

@@ -48,4 +48,7 @@ class S7Point {
   int? get h => _h;
   int? get a => _a;
   String? get comment => _comment;
+  void setComment(String value) {
+    _comment = value;
+  }
 }

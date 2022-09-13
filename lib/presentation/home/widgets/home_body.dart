@@ -11,6 +11,7 @@ import 'package:configure_cma/presentation/home/widgets/select_dir_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class HomeBody extends StatefulWidget {
   final AppUserStacked _users;
@@ -29,7 +30,8 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   static const _debug = true;
-  List<S7Line> _lines = [];
+  String? _dataServerConfigPath;
+  Map<String, S7Line> _lines = {};
   /// 
   /// Builds home body widget
   @override
@@ -80,6 +82,7 @@ class _HomeBodyState extends State<HomeBody> {
                 labelText: 'DataServer file',
                 allowedExtensions: ['conf', 'cfg', 'json'],
                 onComplete: (value) {
+                  _dataServerConfigPath = value;
                   _readConfigFile(value)
                   .then((lines) {
                     if (lines.isNotEmpty) {
@@ -100,7 +103,7 @@ class _HomeBodyState extends State<HomeBody> {
                     physics: AlwaysScrollableScrollPhysics(),
                     children: [
                       S7LineWidget(
-                        lines: _lines,
+                        lines: _lines.values.toList(),
                       ),
                     ]
                   ),
@@ -113,6 +116,27 @@ class _HomeBodyState extends State<HomeBody> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      final dir = dirname(_dataServerConfigPath ?? '');
+                      final path = join(dir, 'confNew.json');
+                      final file = File(path);
+                      if (!file.existsSync()) {
+                        await file.create(recursive: true);
+                      }
+                      final encoder = new JsonEncoder.withIndent("    ");
+                      final json = encoder.convert(
+                        _lines.map((key, line) {
+                          return MapEntry(
+                            key, 
+                            line,
+                          );
+                        })
+                      );
+                      await file.writeAsString(json);
+                    }, 
+                    child: Text('Update config'),
+                  ),
                 ],
               ),
             ],
@@ -122,7 +146,7 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
   ///
-  Future<List<S7Line>> _readConfigFile(String? path) {
+  Future<Map<String, S7Line>> _readConfigFile(String? path) {
     if (path != null) {
       final file = File(path);
       return file.readAsString().then((value) {
@@ -133,14 +157,10 @@ class _HomeBodyState extends State<HomeBody> {
             key, 
             S7Line(key, line),
           );
-        //   log(_debug, 'ied: ', key);
-        //   (ied as Map<String, dynamic>)['db'].forEach((key, value) {
-            
-          // },);
-        }).values.toList();
+        });
       });
     }
-    return Future.value([]);
+    return Future.value({});
   }
 }
 

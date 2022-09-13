@@ -1,4 +1,5 @@
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
+import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/row_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -62,11 +63,58 @@ class PointRowWidget extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-    return RowWidget(
-      color: color,
-      borderColor: borderColor,
-      values: [point.name, point.type, point.offset, point.bit, point.threshHold, point.h, point.a, point.comment],
-      flex: [15, 3, 2, 2, 1, 1, 1, 10],
+    return Row(
+      children: [
+        CellWidget(
+          flex: 15,
+          color: color,
+          borderColor: borderColor,
+          data: point.name,
+        ),
+        CellWidget(
+          flex: 3,
+          color: color,
+          borderColor: borderColor,
+          data: point.type,
+        ),
+        CellWidget(
+          flex: 2,
+          color: color,
+          borderColor: borderColor,
+          data: point.offset,
+        ),
+        CellWidget(
+          flex: 2,
+          color: color,
+          borderColor: borderColor,
+          data: point.bit,
+        ),
+        CellWidget(
+          flex: 1,
+          color: color,
+          borderColor: borderColor,
+          data: point.threshHold,
+        ),
+        CellWidget(
+          flex: 1,
+          color: color,
+          borderColor: borderColor,
+          data: point.h,
+        ),
+        CellWidget(
+          flex: 1,
+          color: color,
+          borderColor: borderColor,
+          data: point.a,
+        ),
+        CellWidget<String>(
+          flex: 10,
+          color: color,
+          borderColor: borderColor,
+          data: '${point.comment}',
+          onChanged: (value) => point.setComment('$value'),
+        ),
+      ],
     );
   }
 }

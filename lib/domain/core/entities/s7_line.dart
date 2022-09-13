@@ -17,4 +17,43 @@ class S7Line {
   }
   String get name => _name;
   Map<String, S7Ied> get ieds => _ieds;
+  Map<String, dynamic> toJson() {
+    return _ieds.map((iedKey, ied) {
+      return MapEntry(
+        iedKey, 
+        {
+          "description": ied.description,
+          "ip": ied.ip,
+          "rack": ied.rack,
+          "slot": ied.slot,
+          "db": ied.dbs.map((dbKey, db) {
+            return MapEntry(
+              dbKey, 
+              {
+                "description": db.description,
+                "number": db.number,
+                "offset": db.offset,
+                "size": db.size,
+                "delay": db.delay,
+                "data": db.points.map((pointKey, point) {
+                  return MapEntry(
+                    pointKey, 
+                    {
+                      "type": point.type,
+                      "offset": point.offset,
+                      if (point.bit != null) "bit": point.bit,
+                      if (point.threshHold != null) "threshHold": point.threshHold,
+                      if (point.h != null) "h": point.h,
+                      if (point.a != null) "a": point.a,
+                      if (point.comment != null) "comment": point.comment,
+                    }
+                  );
+                }),
+              }
+            );
+          }),
+        },
+      );
+    });
+  }
 }
