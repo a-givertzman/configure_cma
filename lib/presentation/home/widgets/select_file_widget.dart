@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 ///
 class SelectFileWidget extends StatefulWidget {
   final void Function(String? value)? _onComplete;
+  final List<String>? allowedExtensions;
   final String? labelText;
   ///
   SelectFileWidget({
     Key? key,
     void Function(String? value)? onComplete,
+    this.allowedExtensions,
     this.labelText,
   }) :
     _onComplete = onComplete,
@@ -38,7 +40,7 @@ class _SelectDirWidgetState extends State<SelectFileWidget> {
             FilePicker.platform.pickFiles(
               allowMultiple: false,
               type: FileType.custom,
-              allowedExtensions: ['conf', 'cfg'],
+              allowedExtensions: widget.allowedExtensions,
             )
             .then((result) {
               if (result != null) {

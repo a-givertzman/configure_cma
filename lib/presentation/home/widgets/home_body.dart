@@ -1,15 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/entities/s7_line.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/presentation/home/widgets/s7_line_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_dir_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class HomeBody extends StatefulWidget {
-  static const _debug = true;
   final AppUserStacked _users;
   /// 
   /// Builds home body using current user
@@ -25,12 +28,13 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  final int _itemCount = 0;
+  static const _debug = true;
+  List<S7Line> _lines = [];
   /// 
   /// Builds home body widget
   @override
   Widget build(BuildContext context) {
-    log(HomeBody._debug, '[$HomeBody.build]');
+    log(_debug, '[$HomeBody.build]');
     const padding = AppUiSettings.padding;
     const blockPadding = AppUiSettings.blockPadding;
     final width = MediaQuery.of(context).size.width;
@@ -45,12 +49,12 @@ class _HomeBodyState extends State<HomeBody> {
         child: Padding(
           padding: const EdgeInsets.all(blockPadding * 2),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               /// Row 1
               Row(
-                mainAxisSize: MainAxisSize.min,
+                // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -74,27 +78,33 @@ class _HomeBodyState extends State<HomeBody> {
               /// Путь к файлу конфигурации DataServer
               SelectFileWidget(
                 labelText: 'DataServer file',
+                allowedExtensions: ['conf', 'cfg', 'json'],
                 onComplete: (value) {
-                  
+                  _readConfigFile(value)
+                  .then((lines) {
+                    if (lines.isNotEmpty) {
+                      setState(() {
+                        _lines = lines;
+                        log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
+                      });
+                    }
+                  });
                 },
               ),
               const SizedBox(height: blockPadding,),
               /// Row 2
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ListView.builder(
-                    itemCount: _itemCount,
-                    itemBuilder: ((context, index) {
-                      return Row(
-                        children: [
-                          Text(),
-                        ],
-                      );
-                    })
+              Expanded(
+                child: Scrollbar(
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    children: [
+                      S7LineWidget(
+                        lines: _lines,
+                      ),
+                    ]
                   ),
-                ],
+                ),
               ),
               const SizedBox(height: blockPadding,),
               /// Row 3
@@ -111,4 +121,27 @@ class _HomeBodyState extends State<HomeBody> {
       ),
     );
   }
+  ///
+  Future<List<S7Line>> _readConfigFile(String? path) {
+    if (path != null) {
+      final file = File(path);
+      return file.readAsString().then((value) {
+        // log(_debug, value);
+        Map<String, dynamic> config = json.decode(value);
+        return config.map((key, line) {
+          return MapEntry(
+            key, 
+            S7Line(key, line),
+          );
+        //   log(_debug, 'ied: ', key);
+        //   (ied as Map<String, dynamic>)['db'].forEach((key, value) {
+            
+          // },);
+        }).values.toList();
+      });
+    }
+    return Future.value([]);
+  }
 }
+
+
