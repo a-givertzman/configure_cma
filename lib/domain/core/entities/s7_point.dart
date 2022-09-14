@@ -43,13 +43,13 @@ class S7Point {
   }
   /// from string list
   S7Point.fromList(String name, List<String> list) {
-    log(_debug, '$S7Point.fromList] $name: ', list);
+    log(_debug, '[$S7Point.fromList] $name: ', list);
     _type = list[0];
-    _offset = int.parse(list[1]);
-    _bit = int.parse(list[2]);
-    _threshold = int.parse(list[3]);
-    _h = int.parse(list[4]);
-    _a = int.parse(list[5]);
+    _offset = int.tryParse(list[1]) ?? 0;
+    _bit = int.tryParse(list[2]);
+    _threshold = int.tryParse(list[3]);
+    _h = int.tryParse(list[4]);
+    _a = int.tryParse(list[5]);
     _comment = list[6];    
   }
   String get name => _name;
