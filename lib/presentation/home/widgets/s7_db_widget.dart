@@ -96,7 +96,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                 ),
                 FittedBox(
                   child: SelectFileWidget(
-                    allowedExtensions: ['csv', 'txt'],
+                    allowedExtensions: ['db', 'txt'],
                     onComplete: (path) {
                       _readCsvFile(context, path)
                       .then((points) {
@@ -114,8 +114,9 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               ],
             ),
             S7PointWidget(
+              flex: {'name': 15, 'type': 3, 'offset': 2, 'bit': 2, 'threshold': 2, 'h': 2, 'a': 2, 'comment': 10},
               points: db.points.values.toList(),
-              newPoints: _newPoints?.values.toList(),
+              newPoints: _newPoints,
             ),
           ],
         );
@@ -132,7 +133,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
   ///
   Result<Map<String, int>> _buildHeader(BuildContext context, List<String> headerLine, List<String> lines) {
     final headerLineReduced = headerLine.where((value) {
-      return value != 'bit' && value != 'threshHold' && value != 'comment' && value != 'h' && value != 'a';
+      return value != 'bit' && value != 'threshold' && value != 'comment' && value != 'h' && value != 'a';
     });
     final hLine = lines.firstWhere(
       (line) {
@@ -153,15 +154,19 @@ class _S7DbWidgetState extends State<S7DbWidget> {
       },
       orElse: () => '',
     ).split(';');
-    hLine.removeWhere((element) => element.isEmpty);
+    // hLine.removeWhere((element) => element.isEmpty);
     log(_debug, '[_buildHeader] headLine: ', hLine);
     if (hLine.length > 1) {
       log(_debug, '[_buildHeader] hLine ok');
+      final Map<String, int> header = {};
+      hLine.asMap().forEach((key, value) {
+        // log(_debug, '[_buildHeader] headLine error');
+        if (value.isNotEmpty) {
+          header[value.toLowerCase()] = key;
+        }
+      });
       return Result(
-        data: hLine.asMap().map((key, value) {
-          // log(_debug, '[_buildHeader] headLine error');
-          return MapEntry(value.toLowerCase(), key);
-        }),
+        data: header,
       );
     }
     final message = 'The file you trying to import is incorrect';
@@ -183,23 +188,15 @@ class _S7DbWidgetState extends State<S7DbWidget> {
         String pointName = '';
         bool isPoint = false;
         return file.readAsLines().then((lines) {
-          final headerLine = ['name', 'datatype', 'offset', 'bit', 'threshHold', 'comment', 'h', 'a'];
-          final headerResult = _buildHeader(context, headerLine, lines);
-          if (headerResult.hasError) {
-            log(_debug, '[_readCsvFile] headLine error');
-            return Map<String, S7Point>();
-          }
-          final header = headerResult.data!;
-          log(_debug, '[_readCsvFile] headLine ok');
-          log(_debug, 'header: ', header);
           return lines.asMap().map<String, S7Point?>((key, line) {
-            final lineItems = line.split(';');
-            lineItems.removeWhere((item) => item.isEmpty);
-            // log(_debug, 'line items: ', lineItems);
+            final lineItems = line.split(RegExp(r'[:,;]'));
+            log(_debug, 'line items: ', lineItems);
             if (_isDataLine(lineItems)) {
               if (_isStruct(lineItems)) {
                 if (isPoint) {
-                  pointName = '';
+                  final pointNameList = pointName.split('.');
+                  pointNameList.removeLast();
+                  pointName = pointNameList.join('.') + '.';
                   isPoint = false;
                 }
                 pointName += '${lineItems[0]}.';
@@ -210,16 +207,17 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                   //   "type": lineItems[header['datatype']!],
                   //   "offset": lineItems[header['offset']!],
                   //   if (header['bit'] != null) "bit": lineItems[header['bit']!],
-                  //   if (header['threshHold'] != null) "threshHold": lineItems[header['threshHold']!],
+                  //   if (header['threshold'] != null) "threshold": lineItems[header['threshold']!],
                   //   if (header['h'] != null) "h": lineItems[header['h']!],
                   //   if (header['a'] != null) "a": lineItems[header['a']!],
                   //   if (header['comment'] != null) "comment": lineItems[header['comment']!],
                   // }),
                   S7Point.fromList('$pointName${lineItems[0]}', [
+                    lineItems[header['name']!], 
                     lineItems[header['datatype']!], 
                     lineItems[header['offset']!],
                     header['bit'] != null ? lineItems[header['bit']!] : '',
-                    header['threshHold'] != null ? lineItems[header['threshHold']!] : '',
+                    header['threshold'] != null ? lineItems[header['threshold']!] : '',
                     header['h'] != null ? lineItems[header['h']!] : '',
                     header['a'] != null ? lineItems[header['a']!] : '',
                     header['comment'] != null ? lineItems[header['comment']!] : '',

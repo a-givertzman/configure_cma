@@ -43,7 +43,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
   @override
   void initState() {
     super.initState();
-    _editingController.text = widget._data.toString();
+    _editingController.text = widget._data != null ? '${widget._data}' : '';
   }
   ///
   @override
@@ -64,26 +64,29 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
           color: color,
           border: Border.all(color: widget._borderColor),
         ),
-        child: TextFormField(
-          controller: _editingController,
-          decoration: InputDecoration(
-            isDense: true,
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.1),
-          ),
-          maxLines: 1,
-          onChanged: (value) {
-            final onChacnged = widget._onChanged;
-            if (onChacnged != null) {
-              if (T == int) {
-                onChacnged(int.parse(value) as T);
-              } else if (T == String) {
-                onChacnged(value as T);
-              } else {
-                log(_debug, 'Ошибка в методе onChanged класса $runtimeType: тип $T не поддерживается.');
+        child: Tooltip(
+          message: newData != null ? '$newData' : '',
+          child: TextFormField(
+            controller: _editingController,
+            decoration: InputDecoration(
+              isDense: true,
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.1),
+            ),
+            maxLines: 1,
+            onChanged: (value) {
+              final onChacnged = widget._onChanged;
+              if (onChacnged != null) {
+                if (T == int) {
+                  onChacnged(int.parse(value) as T);
+                } else if (T == String) {
+                  onChacnged(value as T);
+                } else {
+                  log(_debug, 'Ошибка в методе onChanged класса $runtimeType: тип $T не поддерживается.');
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
     );

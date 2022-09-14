@@ -1,39 +1,45 @@
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
-import 'package:configure_cma/presentation/core/theme/app_theme.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/row_widget.dart';
 import 'package:flutter/material.dart';
 
 class S7PointWidget extends StatefulWidget {
   final List<S7Point> _points;
-  final List<S7Point>? _newPoints;
+  final Map<String, S7Point>? _newPoints;
+  final Map<String, int>? _flex;
   ///
   S7PointWidget({
     Key? key,
     required List<S7Point> points,
-    List<S7Point>? newPoints,
+    Map<String, S7Point>? newPoints,
+    Map<String, int>? flex,
   }) : 
     _points = points,
     _newPoints = newPoints,
+    _flex = flex,
     super(key: key);
   ///
   @override
   State<S7PointWidget> createState() => _S7PointWidgetState();
 }
 
-
+///
 class _S7PointWidgetState extends State<S7PointWidget> {
+  static const _debug = true;
+  ///
   @override
   Widget build(BuildContext context) {
     Color? color = null;
+    final flex = widget._flex ?? {'name': 1, 'type': 1, 'offset': 1, 'bit': 1, 'threshold': 1, 'h': 1, 'a': 1, 'comment': 1};
     const borderColor = Colors.white10;
     return Column(
       children: [
         RowWidget(
           color: color,
           borderColor: borderColor,
-          values: ['name', 'type', 'offset', 'bit', 'threshHold', 'h', 'a', 'comment'],
-          flex: [15, 3, 2, 2, 1, 1, 1, 10],
+          values: ['name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'comment'],
+          flex: [flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['comment']!],
         ),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -41,17 +47,19 @@ class _S7PointWidgetState extends State<S7PointWidget> {
           itemCount: widget._points.length,
           itemBuilder: ((context, index) {
               final point = widget._points[index];
-              final newPoint = widget._newPoints?[index];
-              if (widget._newPoints != null) {
-                if (newPoint != newPoint) {
-                  color = Theme.of(context).stateColors.error.withAlpha(100);
-                }
-              }
+              final newPoint = widget._newPoints?[point.name];
+              if (newPoint != null) log(_debug, '\npoint:  $point\nnPoint: $newPoint');
+              // if (widget._newPoints != null) {
+              //   if (point != newPoint) {
+              //     color = Theme.of(context).stateColors.error.withAlpha(100);
+              //   }
+              // }
               return PointRowWidget(
                 color: color,
                 borderColor: borderColor,
                 point: point,
                 newPoint: newPoint,
+                flex: widget._flex,
               );
           })
         ),
@@ -64,83 +72,88 @@ class _S7PointWidgetState extends State<S7PointWidget> {
 class PointRowWidget extends StatelessWidget {
   final Color? color;
   final Color borderColor;
-  final S7Point point;
+  final S7Point _point;
   final S7Point? newPoint;
+  final Map<String, int>? _flex;
   const PointRowWidget({
     super.key,
     required this.color,
     required this.borderColor,
-    required this.point,
+    required S7Point point,
     this.newPoint,
-  });
+    Map<String, int>? flex,
+  }) : 
+    _point = point,
+    _flex = flex;
   ///
   @override
   Widget build(BuildContext context) {
+    final flex = _flex;
     return Row(
       children: [
         CellWidget<String>(
-          flex: 15,
+          flex: flex != null ? flex['name'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.name,
+          data: _point.name,
           newData: newPoint?.name,
-          onChanged: (value) => point.setName(value),
+          onChanged: (value) => _point.setName(value),
         ),
         CellWidget<String>(
-          flex: 3,
+          flex: flex != null ? flex['type'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.type,
+          data: _point.type,
           newData: newPoint?.type,
-          onChanged: (value) => point.setType(value),
+          onChanged: (value) => _point.setType(value),
         ),
         CellWidget<int?>(
-          flex: 2,
+          flex: flex != null ? flex['offset'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.offset,
+          data: _point.offset,
           newData: newPoint?.offset,
-          onChanged: (value) => point.setOffset(value),
+          onChanged: (value) => _point.setOffset(value),
         ),
         CellWidget<int?>(
-          flex: 2,
+          flex: flex != null ? flex['bit'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.bit,
+          data: _point.bit,
           newData: newPoint?.bit,
-          onChanged: (value) => point.setBit(value),
+          onChanged: (value) => _point.setBit(value),
         ),
         CellWidget<int?>(
-          flex: 1,
+          flex: flex != null ? flex['threshold'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.threshold,
+          data: _point.threshold,
           newData: newPoint?.threshold,
-          onChanged: (value) => point.setThreshold(value),
+          onChanged: (value) => _point.setThreshold(value),
         ),
         CellWidget<int?>(
-          flex: 1,
+          flex: flex != null ? flex['h'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.h,
+          data: _point.h,
           newData: newPoint?.h,
-          onChanged: (value) => point.setH(value),
+          onChanged: (value) => _point.setH(value),
         ),
         CellWidget<int?>(
-          flex: 1,
+          flex: flex != null ? flex['a'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.a,
+          data: _point.a,
           newData: newPoint?.a,
-          onChanged: (value) => point.setA(value),
+          onChanged: (value) => _point.setA(value),
         ),
         CellWidget<String?>(
-          flex: 10,
+          flex: flex != null ? flex['comment'] ?? 1 : 1,
           color: color,
           borderColor: borderColor,
-          data: point.comment,
+          data: _point.comment,
           newData: newPoint?.comment,
-          onChanged: (value) => point.setComment(value),
+          onChanged: (value) => _point.setComment(value),
         ),
       ],
     );

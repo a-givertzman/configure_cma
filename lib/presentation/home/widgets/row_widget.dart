@@ -16,10 +16,11 @@ class RowWidget extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-    int index = 0;
+    int index = -1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: values.map((value) {
+        index++;
         return CellWidget(
           flex: flex[index],
           color: color,

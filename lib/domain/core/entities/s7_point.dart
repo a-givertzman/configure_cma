@@ -36,7 +36,7 @@ class S7Point {
     _type = config['type'];
     _offset = config['offset'];
     _bit = config['bit'];
-    _threshold = config['threshHold'];
+    _threshold = config['threshold'];
     _h = config['h'];
     _a = config['a'];
     _comment = config['comment'];
@@ -44,14 +44,28 @@ class S7Point {
   /// from string list
   S7Point.fromList(String name, List<String> list) : _name = name {
     log(_debug, '[$S7Point.fromList] $name: ', list);
-    _type = list[0];
-    _offset = int.tryParse(list[1]) ?? 0;
-    _bit = int.tryParse(list[2]);
-    _threshold = int.tryParse(list[3]);
-    _h = int.tryParse(list[4]);
-    _a = int.tryParse(list[5]);
-    _comment = list[6];    
+    _type = list[1];
+    _offset = double.tryParse(list[2])?.toInt() ?? 0;
+    _bit = int.tryParse(list[3]);
+    _threshold = int.tryParse(list[4]);
+    _h = int.tryParse(list[5]);
+    _a = int.tryParse(list[6]);
+    _comment = list[7];    
   }
+  ///
+  @override
+  bool operator ==(Object other) =>
+    other is S7Point 
+    // && other.runtimeType == runtimeType
+    && other.name == _name
+    && other.type == _type
+    && other.offset == _offset
+    && other.bit == _bit
+    && other.threshold == _threshold
+    && other.h == _h
+    && other.a == _a
+    && other.comment == _comment;
+  ///
   String get name => _name;
   String get type => _type;
   int get offset => _offset;
