@@ -19,32 +19,29 @@ class S7LineWidget extends StatefulWidget {
 
 
 class _S7LineWidgetState extends State<S7LineWidget> {
+  ///
   @override
   Widget build(BuildContext context) {
-    if (widget._lines.isNotEmpty) {
-      return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widget._lines.length,
-        itemBuilder: ((context, lineIndex) {
-            final line = widget._lines[lineIndex];
-            final color = Theme.of(context).colorScheme.primary.withAlpha(90);
-            const borderColor = Colors.white10;
-            return Column(
-              children: [
-                LineRowWidget(
-                  color: color, 
-                  borderColor: borderColor, 
-                  values: [line.name],
-                ),
-                S7IedWidget(ieds: line.ieds.values.toList()),
-              ],
-            );
-        })
-      );
-    } else {
-      return Center(child: Text('Now data'));
-    }
+    return ListView.builder(
+    physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget._lines.length,
+      itemBuilder: ((context, lineIndex) {
+          final line = widget._lines[lineIndex];
+          final color = Theme.of(context).colorScheme.primary.withAlpha(90);
+          const borderColor = Colors.white10;
+          return Column(
+            children: [
+              LineRowWidget(
+                color: color, 
+                borderColor: borderColor, 
+                values: [line.name],
+              ),
+              S7IedWidget(ieds: line.ieds.values.toList()),
+            ],
+          );
+      })
+    );
   }
 }
 

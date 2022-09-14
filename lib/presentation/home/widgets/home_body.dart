@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
@@ -30,6 +31,7 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   static const _debug = true;
+  final _state = NetworkOperationState();
   String? _dataServerConfigPath;
   Map<String, S7Line> _lines = {};
   /// 
@@ -42,29 +44,30 @@ class _HomeBodyState extends State<HomeBody> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final stateColors = Theme.of(context).stateColors;
-    return Transform.scale(
-      scale: min(
-        width / AppUiSettings.displaySize.width, 
-        height / AppUiSettings.displaySize.height,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: width,
+        maxHeight: height,
       ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(blockPadding * 2),
-          child: Column(
-            // mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              /// Row 1
-              Row(
-                // mainAxisSize: MainAxisSize.min,
+      child: Column(
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          /// Row 1
+          SizedBox(
+            width: width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.only(top: padding),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/img/brand_icon.png',
-                    scale: 4.0,
-                    opacity: const AlwaysStoppedAnimation<double>(0.2),
-                  ),
+                  // Image.asset(
+                  //   'assets/img/brand_icon.png',
+                  //   scale: 4.0,
+                  //   opacity: const AlwaysStoppedAnimation<double>(0.2),
+                  // ),
                   /// Путь к flutter проекту
                   Expanded(
                     child: SelectDirWidget(
@@ -74,76 +77,111 @@ class _HomeBodyState extends State<HomeBody> {
                       },
                     ),
                   ),
+                  IconButton(onPressed: null, icon: Icon(null)),
                 ],
               ),
-              const SizedBox(height: blockPadding,),
-              /// Путь к файлу конфигурации DataServer
-              SelectFileWidget(
-                labelText: 'DataServer file',
-                allowedExtensions: ['conf', 'cfg', 'json'],
-                onComplete: (value) {
-                  _dataServerConfigPath = value;
-                  _readConfigFile(value)
-                  .then((lines) {
-                    if (lines.isNotEmpty) {
-                      setState(() {
-                        _lines = lines;
-                        log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
+            ),
+          ),
+          // const SizedBox(height: blockPadding,),
+          /// Путь к файлу конфигурации DataServer
+          SizedBox(
+            width: width * 0.8,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: SelectFileWidget(
+                    editable: true,
+                    labelText: 'Path to DataServer config file',
+                    allowedExtensions: ['conf', 'cfg', 'json'],
+                    onComplete: (value) {
+                      setState(() => _state.setLoading());
+                      _dataServerConfigPath = value;
+                      _readConfigFile(value)
+                      .then((lines) {
+                        if (lines.isNotEmpty) {
+                          setState(() {
+                            _lines = lines;
+                            log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
+                          });
+                        }
+                        setState(() => _state.setLoaded());
                       });
+                    },
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final dir = dirname(_dataServerConfigPath ?? '');
+                    final path = join(dir, 'confNew.json');
+                    final file = File(path);
+                    if (!file.existsSync()) {
+                      await file.create(recursive: true);
                     }
-                  });
-                },
-              ),
-              const SizedBox(height: blockPadding,),
-              /// Row 2
-              Expanded(
+                    final encoder = new JsonEncoder.withIndent("    ");
+                    final json = encoder.convert(
+                      _lines.map((key, line) {
+                        return MapEntry(
+                          key, 
+                          line,
+                        );
+                      })
+                    );
+                    await file.writeAsString(json);
+                  }, 
+                  icon: Tooltip(
+                    child: Icon(Icons.file_upload),
+                    message: 'Save config',
+                  ),
+                ),                  
+              ],
+            ),
+          ),
+          const SizedBox(height: blockPadding,),
+          /// Row 2
+          Expanded(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: padding,
+                  right: padding,
+                  bottom: padding,
+                ),
                 child: Scrollbar(
                   child: ListView(
                     shrinkWrap: true,
                     physics: AlwaysScrollableScrollPhysics(),
                     children: [
-                      S7LineWidget(
-                        lines: _lines.values.toList(),
-                      ),
+                      _buildListViewWidget(),
                     ]
                   ),
                 ),
               ),
-              const SizedBox(height: blockPadding,),
-              /// Row 3
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final dir = dirname(_dataServerConfigPath ?? '');
-                      final path = join(dir, 'confNew.json');
-                      final file = File(path);
-                      if (!file.existsSync()) {
-                        await file.create(recursive: true);
-                      }
-                      final encoder = new JsonEncoder.withIndent("    ");
-                      final json = encoder.convert(
-                        _lines.map((key, line) {
-                          return MapEntry(
-                            key, 
-                            line,
-                          );
-                        })
-                      );
-                      await file.writeAsString(json);
-                    }, 
-                    child: Text('Update config'),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+  Widget _buildListViewWidget() {
+    if (_state.isLoading) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          Text('Loading...'),
+        ],
+      );
+    } else if (_lines.isNotEmpty) {
+      return S7LineWidget(
+        lines: _lines.values.toList(),
+      );
+    } else {
+      return Center(child: Text('Now data'));
+    }    
   }
   ///
   Future<Map<String, S7Line>> _readConfigFile(String? path) {

@@ -19,7 +19,7 @@ class S7Ied {
     _dbs = config['db'].map<String, S7Db>((key, value) {
       return MapEntry<String, S7Db>(
         key, 
-        S7Db(key, value as Map<String, dynamic>),
+        S7Db.fromMap(key, value as Map<String, dynamic>),
       );
     });
   }

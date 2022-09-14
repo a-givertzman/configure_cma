@@ -42,7 +42,7 @@ class S7Line {
                       "type": point.type,
                       "offset": point.offset,
                       if (point.bit != null) "bit": point.bit,
-                      if (point.threshHold != null) "threshHold": point.threshHold,
+                      if (point.threshold != null) "threshHold": point.threshold,
                       if (point.h != null) "h": point.h,
                       if (point.a != null) "a": point.a,
                       if (point.comment != null) "comment": point.comment,

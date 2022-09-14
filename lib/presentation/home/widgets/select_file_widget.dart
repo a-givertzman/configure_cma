@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 
 ///
 class SelectFileWidget extends StatefulWidget {
-  final void Function(String? value)? _onComplete;
+  final bool _editable;
+  final void Function(String? path)? _onComplete;
   final List<String>? allowedExtensions;
   final String? labelText;
+  final Widget icon;
   ///
   SelectFileWidget({
     Key? key,
-    void Function(String? value)? onComplete,
+    editable = false,
+    void Function(String? path)? onComplete,
     this.allowedExtensions,
     this.labelText,
+    this.icon = const Icon(Icons.more_horiz),
   }) :
+    _editable = editable,
     _onComplete = onComplete,
     super(key: key);
   ///
@@ -26,15 +31,19 @@ class _SelectDirWidgetState extends State<SelectFileWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: TextFormField(
-            controller: _editingController,
-            decoration: InputDecoration(
-              labelText: widget.labelText,
+        if (widget._editable)
+          Expanded(
+            child: TextFormField(
+              controller: _editingController,
+              decoration: InputDecoration(
+                labelText: widget.labelText,
+              ),
             ),
           ),
-        ),
         IconButton(
           onPressed: () async {
             FilePicker.platform.pickFiles(
@@ -55,7 +64,7 @@ class _SelectDirWidgetState extends State<SelectFileWidget> {
               }      
             });
           }, 
-          icon: Icon(Icons.more_horiz),
+          icon: widget.icon,
         ),        
       ],
     );
