@@ -42,7 +42,7 @@ class S7Point {
     _comment = config['comment'];
   }
   /// from string list
-  S7Point.fromList(String name, List<String> list) {
+  S7Point.fromList(String name, List<String> list) : _name = name {
     log(_debug, '[$S7Point.fromList] $name: ', list);
     _type = list[0];
     _offset = int.tryParse(list[1]) ?? 0;
@@ -104,5 +104,10 @@ class S7Point {
         stackTrace: StackTrace.current,
       );
     }
+  }
+  ///
+  @override
+  String toString() {
+    return 'name: $_name; type: $_type; offset: $_offset; bit: $_bit; threshold: $_threshold; h: $_h; a: $_a; comment: $_comment';
   }
 }

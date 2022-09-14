@@ -1,16 +1,16 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:configure_cma/domain/core/entities/s7_db.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/result/result.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_point_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class S7DbWidget extends StatefulWidget {
   final List<S7Db> _dbs;
@@ -33,6 +33,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
   static const _debug = true;
   String? _newConfigPath;
   List<S7Db>? _newDbs;
+  Map<String, S7Point>? _newPoints;
   bool _isReading = false;
   ///
   @override
@@ -97,7 +98,12 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                   child: SelectFileWidget(
                     allowedExtensions: ['csv', 'txt'],
                     onComplete: (path) {
-                      _readCsvFile(context, path);
+                      _readCsvFile(context, path)
+                      .then((points) {
+                        setState(() {
+                          _newPoints = points;
+                        });
+                      });
                     },
                     icon: Tooltip(
                       child: Icon(Icons.file_download),
@@ -109,7 +115,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
             ),
             S7PointWidget(
               points: db.points.values.toList(),
-              newPoints: newDb?.points.values.toList(),
+              newPoints: _newPoints?.values.toList(),
             ),
           ],
         );
@@ -124,7 +130,10 @@ class _S7DbWidgetState extends State<S7DbWidget> {
     return lineItems[1].toLowerCase() == 'struct';
   }
   ///
-  bool _findHeaderLine(BuildContext context, List<String> headerLine, List<String> lines) {
+  Result<Map<String, int>> _buildHeader(BuildContext context, List<String> headerLine, List<String> lines) {
+    final headerLineReduced = headerLine.where((value) {
+      return value != 'bit' && value != 'threshHold' && value != 'comment' && value != 'h' && value != 'a';
+    });
     final hLine = lines.firstWhere(
       (line) {
         if (line.isNotEmpty) {
@@ -133,9 +142,9 @@ class _S7DbWidgetState extends State<S7DbWidget> {
           // log(_debug, 'headLine items: ', items);
           // log(_debug, 'headLine items: ', ['name', 'datatype', 'offset', 'comment', 'h', 'a']);
           if (items.length > 1) {
-            return headerLine.every((element) {
+            return headerLineReduced.every((element) {
               final test = items.contains(element);
-              if (test) log(_debug, '[_findHeaderLine] item: $element test: ', test);
+              if (test) log(_debug, '[_buildHeader] item: $element test: ', test);
               return test;
             });
           }
@@ -144,42 +153,49 @@ class _S7DbWidgetState extends State<S7DbWidget> {
       },
       orElse: () => '',
     ).split(';');
-    log(_debug, '[_findHeaderLine] headLine: ', hLine);
+    hLine.removeWhere((element) => element.isEmpty);
+    log(_debug, '[_buildHeader] headLine: ', hLine);
     if (hLine.length > 1) {
-      log(_debug, '[_findHeaderLine] headLine ok');
-      return true;
+      log(_debug, '[_buildHeader] hLine ok');
+      return Result(
+        data: hLine.asMap().map((key, value) {
+          // log(_debug, '[_buildHeader] headLine error');
+          return MapEntry(value.toLowerCase(), key);
+        }),
+      );
     }
+    final message = 'The file you trying to import is incorrect';
     FlushbarHelper.createError(
       duration: AppUiSettings.flushBarDurationMedium,
-      message: 'The file you trying to import is incorrect',
+      message: message,
     ).show(context);
-    log(_debug, '[_findHeaderLine] headLine error');
-    return false;
+    log(_debug, '[_buildHeader] hLine error');
+    return Result(
+      error: Failure.unexpected(message: message, stackTrace: StackTrace.current)
+    );
   }
   ///
-  void _readCsvFile(BuildContext context, String? path) async {
+  Future<Map<String, S7Point>> _readCsvFile(BuildContext context, String? path) async {
     if (!_isReading) {
       _isReading = true;
       if (path != null) {
         final file = File(path);
         String pointName = '';
         bool isPoint = false;
-        Map<String, int> header = {};
-        file.readAsLines().then((lines) {
+        return file.readAsLines().then((lines) {
           final headerLine = ['name', 'datatype', 'offset', 'bit', 'threshHold', 'comment', 'h', 'a'];
-          if (!_findHeaderLine(context, headerLine, lines)) {
+          final headerResult = _buildHeader(context, headerLine, lines);
+          if (headerResult.hasError) {
+            log(_debug, '[_readCsvFile] headLine error');
             return Map<String, S7Point>();
           }
-          header = headerLine.asMap().map((key, value) {
-            log(_debug, '[_readCsvFile] headLine error');
-            return MapEntry(value, key);
-          });
+          final header = headerResult.data!;
           log(_debug, '[_readCsvFile] headLine ok');
           log(_debug, 'header: ', header);
           return lines.asMap().map<String, S7Point?>((key, line) {
             final lineItems = line.split(';');
             lineItems.removeWhere((item) => item.isEmpty);
-            log(_debug, 'line items: ', lineItems);
+            // log(_debug, 'line items: ', lineItems);
             if (_isDataLine(lineItems)) {
               if (_isStruct(lineItems)) {
                 if (isPoint) {
@@ -190,15 +206,23 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               } else {
                 final point = MapEntry(
                   '$pointName${lineItems[0]}',
+                  // S7Point.fromMap('$pointName${lineItems[0]}', {
+                  //   "type": lineItems[header['datatype']!],
+                  //   "offset": lineItems[header['offset']!],
+                  //   if (header['bit'] != null) "bit": lineItems[header['bit']!],
+                  //   if (header['threshHold'] != null) "threshHold": lineItems[header['threshHold']!],
+                  //   if (header['h'] != null) "h": lineItems[header['h']!],
+                  //   if (header['a'] != null) "a": lineItems[header['a']!],
+                  //   if (header['comment'] != null) "comment": lineItems[header['comment']!],
+                  // }),
                   S7Point.fromList('$pointName${lineItems[0]}', [
-                    lineItems[header['name']!], 
                     lineItems[header['datatype']!], 
                     lineItems[header['offset']!],
-                    lineItems[header['bit']!],
-                    lineItems[header['threshHold']!],
-                    lineItems[header['h']!],
-                    lineItems[header['a']!],
-                    lineItems[header['comment']!],
+                    header['bit'] != null ? lineItems[header['bit']!] : '',
+                    header['threshHold'] != null ? lineItems[header['threshHold']!] : '',
+                    header['h'] != null ? lineItems[header['h']!] : '',
+                    header['a'] != null ? lineItems[header['a']!] : '',
+                    header['comment'] != null ? lineItems[header['comment']!] : '',
                   ]),
                 );
                 isPoint = true;
@@ -208,15 +232,17 @@ class _S7DbWidgetState extends State<S7DbWidget> {
             return MapEntry(UniqueKey().toString(), null);
           });
         }).then((points) {
-          points.map((key, value) {
-            if (value != null) log(_debug, '$key: ', value);
-            return MapEntry(
-              key, 
-              value,
-            );
+          final newPoints = Map<String, S7Point>();
+          points.forEach((key, value) {
+            if (value != null) {
+              log(_debug, '$key: ', value);
+              newPoints.putIfAbsent(key, () => value);
+            }
           },);
+          return newPoints;
         }).whenComplete(() => _isReading = false);
       }
     }
+    return Future.value(Map<String, S7Point>());
   }
 }
