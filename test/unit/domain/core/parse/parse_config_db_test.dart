@@ -142,8 +142,8 @@ void main() {
     });
     test('create', () async {
       final parse = ParseConfigDb(
-        '',
-        source.split('\n'),
+        lines: source.split('\n'),
+        offset: ParseOffset(0),
       ).parse();
       log(_debug, 'parse: ', parse);
       // expect(

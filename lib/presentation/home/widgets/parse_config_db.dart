@@ -1,3 +1,4 @@
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 
@@ -9,10 +10,16 @@ class ParseConfigDb {
   static const _debug = true;
   final List<String> _lines;
   final String _path;
+  ParseOffset _offset;
   ParseState _state = ParseState.initial;
   ///
-  ParseConfigDb(String path, List<String> lines) :
+  ParseConfigDb({
+    String path = '', 
+    required ParseOffset offset,
+    required List<String> lines,
+  }) :
     _path = path,
+    _offset = offset,
     _lines = lines;
   ///
   Map<String, dynamic> parse() {
@@ -33,20 +40,22 @@ class ParseConfigDb {
         }
       } else 
       if (_state == ParseState.structOpen) {
-        final lineItems = line.trim().split(' ');
-        final name = lineItems[0];
+        final tagName = RegExp(r'\b\w+\b').firstMatch(line)?[0];
+        final tagType = RegExp(r':\s(\b\w+\b)').firstMatch(line)?[1];
         if (matchStructOpen != null) {
-          result['$name'] = ParseConfigDb(
-            '$_path$name.', 
-            _lines,
+          result['$tagName'] = ParseConfigDb(
+            path: '$_path$tagName.', 
+            offset: _offset,
+            lines: _lines,
           ).parse();
         } else
         if (matchStructClose != null) {
           _state = ParseState.structClose;
           log(_debug, '$_path: CLOSE');
         } else {
-          result['$_path$name'] = lineItems[2];
-          log(_debug, '$_path | ', line.trim());
+          result['$_path$tagName'] = {'type': tagType, 'offset': _offset.value};
+          log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
+          _offset.add(DsDataType.fromString('$tagType').length);
         }
       }
       if (_state == ParseState.structClose) {
@@ -78,4 +87,11 @@ enum ParseState {
   final int value;
 }
 
-
+class ParseOffset {
+  int _v;
+  ParseOffset(int value) : _v = value;
+  add(int value) {
+    _v += value;
+  }
+  int get value => _v;
+}
