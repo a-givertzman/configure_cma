@@ -12,19 +12,21 @@ class ParseConfigDb {
   final String _path;
   ParseOffset _offset;
   ParseState _state = ParseState.initial;
+  Map<String, dynamic> _result;
   ///
   ParseConfigDb({
     String path = '', 
     required ParseOffset offset,
     required List<String> lines,
+    Map<String, dynamic>? result,
   }) :
     _path = path,
     _offset = offset,
-    _lines = lines;
+    _lines = lines,
+    _result = result ?? {};
   ///
   Map<String, dynamic> parse() {
     // log(_debug, '[$ParseConfigDb.parse] _lines:\n', _lines);
-    final Map<String, dynamic> result = {};
     int index = 0;
     // final lines = List.from(_lines);
     while (_lines.isNotEmpty) {
@@ -43,24 +45,25 @@ class ParseConfigDb {
         final tagName = RegExp(r'\b\w+\b').firstMatch(line)?[0];
         final tagType = RegExp(r':\s(\b\w+\b)').firstMatch(line)?[1];
         if (matchStructOpen != null) {
-          result['$tagName'] = ParseConfigDb(
+          ParseConfigDb(
             path: '$_path$tagName.', 
             offset: _offset,
             lines: _lines,
+            result: _result,
           ).parse();
         } else
         if (matchStructClose != null) {
           _state = ParseState.structClose;
           log(_debug, '$_path: CLOSE');
         } else {
-          result['$_path$tagName'] = {'type': tagType, 'offset': _offset.value};
+          _result['$_path$tagName'] = {'type': tagType, 'offset': _offset.value};
           log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
           _offset.add(DsDataType.fromString('$tagType').length);
         }
       }
       if (_state == ParseState.structClose) {
         log(_debug, '$_path: closed');
-        return result;
+        return _result;
       }
       _lines.removeAt(index);
     }
