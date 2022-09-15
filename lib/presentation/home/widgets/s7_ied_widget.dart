@@ -5,20 +5,24 @@ import 'package:flutter/material.dart';
 
 class S7IedWidget extends StatefulWidget {
   final List<S7Ied> _ieds;
+  bool _resetNewPoints = false;
   ///
   S7IedWidget({
     Key? key,
     required List<S7Ied> ieds,
+    bool? resetNewPoints,
   }) : 
     _ieds = ieds,
+    _resetNewPoints = resetNewPoints ?? false,
     super(key: key);
   ///
   @override
   State<S7IedWidget> createState() => _S7IedWidgetState();
 }
 
-
+///
 class _S7IedWidgetState extends State<S7IedWidget> {
+  ///
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -66,7 +70,10 @@ class _S7IedWidgetState extends State<S7IedWidget> {
                   ),
                 ],
               ),
-              S7DbWidget(dbs: ied.dbs.values.toList()),
+              S7DbWidget(
+                dbs: ied.dbs.values.toList(),
+                resetNewPoints: widget._resetNewPoints,
+              ),
             ],
           );
       })

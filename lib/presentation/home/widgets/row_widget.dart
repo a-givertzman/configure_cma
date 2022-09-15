@@ -6,12 +6,14 @@ class RowWidget extends StatelessWidget {
   final Color borderColor;
   final List values;
   final List<int> flex;
+  final List<String?>? tooltips;
   const RowWidget({
     super.key,
     required this.color,
     required this.borderColor,
     required this.values,
     required this.flex,
+    this.tooltips,
   });
   ///
   @override
@@ -23,6 +25,7 @@ class RowWidget extends StatelessWidget {
         index++;
         return CellWidget(
           flex: flex[index],
+          tooltip: tooltips?[index],
           color: color,
           borderColor: borderColor,
           data: value,

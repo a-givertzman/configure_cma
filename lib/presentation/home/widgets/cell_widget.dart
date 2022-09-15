@@ -1,34 +1,35 @@
-import 'package:configure_cma/domain/core/log/log.dart';
-import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class CellWidget<T> extends StatefulWidget {
-  final T _data;
+  final T? _data;
   final T? _newData;
   final int _flex;
   final Color? _color;
   final Color _borderColor;
-  final void Function(T value)? _onChanged;
+  final void Function(String value)? _onChanged;
   final bool _readOnly;
+  final String _tooltip;
   ///
   CellWidget({
     Key? key,
-    required T data,
+    T? data,
     T? newData,
     int flex = 1,
     Color? color,
-    Color borderColor = Colors.white10,
-    void Function(T value)? onChanged,
+    Color? borderColor,
+    void Function(String value)? onChanged,
     bool readOnly = false,
+    String? tooltip,
   }) : 
     _data = data,
     _newData = newData,
     _flex = flex,
     _color = color,
-    _borderColor = borderColor,
+    _borderColor = borderColor ?? Colors.white10,
     _onChanged = onChanged,
     _readOnly = readOnly,
+    _tooltip = tooltip ?? '',
     super(key: key);
   ///
   @override
@@ -43,7 +44,6 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
   @override
   void initState() {
     super.initState();
-    _editingController.text = widget._data != null ? '${widget._data}' : '';
   }
   ///
   @override
@@ -53,9 +53,10 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
     Color? color = widget._color;
     if (newData != null) {
       if (widget._data != newData) {
-        color = Theme.of(context).stateColors.highLevel.withAlpha(100);
+        color = Colors.yellow.withAlpha(100);
       }
     }
+    _editingController.text = widget._data != null ? '${widget._data}' : '';
     return Expanded(
       flex: widget._flex,
       child: Container(
@@ -65,8 +66,9 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
           border: Border.all(color: widget._borderColor),
         ),
         child: Tooltip(
-          message: newData != null ? '$newData' : '',
+          message: widget._tooltip,
           child: TextFormField(
+            readOnly: widget._readOnly,
             controller: _editingController,
             decoration: InputDecoration(
               isDense: true,
@@ -77,13 +79,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
             onChanged: (value) {
               final onChacnged = widget._onChanged;
               if (onChacnged != null) {
-                if (T == int) {
-                  onChacnged(int.parse(value) as T);
-                } else if (T == String) {
-                  onChacnged(value as T);
-                } else {
-                  log(_debug, 'Ошибка в методе onChanged класса $runtimeType: тип $T не поддерживается.');
-                }
+                onChacnged(value);
               }
             },
           ),

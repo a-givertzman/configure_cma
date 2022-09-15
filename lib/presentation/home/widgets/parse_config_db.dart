@@ -33,12 +33,12 @@ class ParseConfigDb {
       final line = _lines.first;
       final matchStructOpen = _matchStructOpen(line);
       final matchStructClose = _matchStructClose(line);
-      log(_debug, '$_path match: ', matchStructOpen);
-      log(_debug, '$_path match: ', matchStructClose);      
+      // log(_debug, '$_path match: ', matchStructOpen);
+      // log(_debug, '$_path match: ', matchStructClose);      
       if (_state == ParseState.initial) {
         if (matchStructOpen != null) {
           _state = ParseState.structOpen;
-          log(_debug, '$_path: OPEN');
+          // log(_debug, '$_path: OPEN');
         }
       } else 
       if (_state == ParseState.structOpen) {
@@ -54,15 +54,15 @@ class ParseConfigDb {
         } else
         if (matchStructClose != null) {
           _state = ParseState.structClose;
-          log(_debug, '$_path: CLOSE');
+          // log(_debug, '$_path: CLOSE');
         } else {
           _result['$_path$tagName'] = {'type': tagType, 'offset': _offset.value};
-          log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
+          // log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
           _offset.add(DsDataType.fromString('$tagType').length);
         }
       }
       if (_state == ParseState.structClose) {
-        log(_debug, '$_path: closed');
+        // log(_debug, '$_path: closed');
         return _result;
       }
       _lines.removeAt(index);

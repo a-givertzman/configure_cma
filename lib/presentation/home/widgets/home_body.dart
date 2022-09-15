@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
@@ -32,8 +31,10 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   static const _debug = true;
   final _state = NetworkOperationState();
+  final ScrollController _scrollController = ScrollController();
   String? _dataServerConfigPath;
   Map<String, S7Line> _lines = {};
+  bool _resetNewPoints = false;
   /// 
   /// Builds home body widget
   @override
@@ -99,11 +100,11 @@ class _HomeBodyState extends State<HomeBody> {
                     onComplete: (value) {
                       setState(() => _state.setLoading());
                       _dataServerConfigPath = value;
-                      _readConfigFile(value)
-                      .then((lines) {
+                      _readConfigFile(value).then((lines) {
                         if (lines.isNotEmpty) {
                           setState(() {
                             _lines = lines;
+                            _resetNewPoints = true;
                             log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
                           });
                         }
@@ -114,6 +115,7 @@ class _HomeBodyState extends State<HomeBody> {
                 ),
                 IconButton(
                   onPressed: () async {
+                    log(_debug, '[$_HomeBodyState.build] SAVING');
                     final dir = dirname(_dataServerConfigPath ?? '');
                     final path = join(dir, 'confNew.json');
                     final file = File(path);
@@ -130,6 +132,7 @@ class _HomeBodyState extends State<HomeBody> {
                       })
                     );
                     await file.writeAsString(json);
+                    setState(() {});
                   }, 
                   icon: Tooltip(
                     child: Icon(Icons.file_upload),
@@ -150,7 +153,9 @@ class _HomeBodyState extends State<HomeBody> {
                   bottom: padding,
                 ),
                 child: Scrollbar(
+                  controller: _scrollController,
                   child: ListView(
+                    controller: _scrollController,
                     shrinkWrap: true,
                     physics: AlwaysScrollableScrollPhysics(),
                     children: [
@@ -178,6 +183,7 @@ class _HomeBodyState extends State<HomeBody> {
     } else if (_lines.isNotEmpty) {
       return S7LineWidget(
         lines: _lines.values.toList(),
+        resetNewPoints: _resetNewPoints,
       );
     } else {
       return Center(child: Text('Now data'));

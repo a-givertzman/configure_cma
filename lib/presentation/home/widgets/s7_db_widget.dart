@@ -1,28 +1,26 @@
 import 'dart:io';
 
-import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:configure_cma/domain/core/entities/s7_db.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
-import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/domain/core/result/result.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_point_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
-import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class S7DbWidget extends StatefulWidget {
   final List<S7Db> _dbs;
+  bool _resetNewPoints = false;
   ///
   S7DbWidget({
     Key? key,
     required List<S7Db> dbs,
-    // List<S7Db>? newDbs,
+    bool? resetNewPoints,
   }) : 
     _dbs = dbs,
-    // _newDbs = newDbs,
+    _resetNewPoints = resetNewPoints ?? false,
     super(key: key);
   ///
   @override
@@ -39,6 +37,9 @@ class _S7DbWidgetState extends State<S7DbWidget> {
   ///
   @override
   Widget build(BuildContext context) {
+    if (widget._resetNewPoints) {
+      _newPoints = null;
+    }
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -115,8 +116,8 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               ],
             ),
             S7PointWidget(
-              flex: {'name': 15, 'type': 3, 'offset': 2, 'bit': 2, 'threshold': 2, 'h': 2, 'a': 2, 'comment': 10},
-              points: db.points.values.toList(),
+              flex: {'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15},
+              points: db.points,
               newPoints: _newPoints,
             ),
           ],
@@ -131,6 +132,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
       if (path != null) {
         final file = File(path);
         return file.readAsLines().then((lines) {
+          _isReading = false;
           return Result(
             data: ParseConfigDb(
               lines: lines,
@@ -143,11 +145,17 @@ class _S7DbWidgetState extends State<S7DbWidget> {
             }),
           );
         });
+      } else {
+        return Result(
+          error: Failure.convertion(message: '[$S7DbWidget._readDbFile] path can\'t bee null', 
+          stackTrace: StackTrace.current),
+        );
       }
+    } else {
+      return Result(
+        error: Failure.convertion(message: '[$S7DbWidget._readDbFile] Not ready', 
+        stackTrace: StackTrace.current),
+      );
     }
-    return Result(
-      error: Failure.convertion(message: 'Not ready', 
-      stackTrace: StackTrace.current),
-    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/presentation/home/widgets/s7_point_marked.dart';
 
 class S7Db {
   static const _debug = true;
@@ -9,7 +10,7 @@ class S7Db {
   late int _offset;
   late int _size;
   late int _delay;
-  late Map<String, S7Point> _points;
+  late Map<String, S7PointMarked> _points;
   ///
   S7Db({
     required String name, 
@@ -34,10 +35,10 @@ class S7Db {
     _offset = config['offset'];
     _size = config['size'];
     _delay = config['delay'];
-    _points = config['data'].map<String, S7Point>((key, value) {
-      return MapEntry<String, S7Point>(
+    _points = config['data'].map<String, S7PointMarked>((key, value) {
+      return MapEntry<String, S7PointMarked>(
         key, 
-        S7Point.fromMap(key, value as Map),
+        S7PointMarked(S7Point.fromMap(key, value as Map)),
       );
     });
   }
@@ -63,5 +64,5 @@ class S7Db {
   int get offset => _offset;
   int get size => _size;
   int get delay => _delay;
-  Map<String, S7Point> get points => _points;
+  Map<String, S7PointMarked> get points => _points;
 }

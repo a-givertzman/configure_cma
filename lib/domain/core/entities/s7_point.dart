@@ -1,5 +1,6 @@
 import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/result/result.dart';
 
 class S7Point {
   static const _debug = true;
@@ -10,6 +11,7 @@ class S7Point {
   late int? _threshold;
   late int? _h;
   late int? _a;
+  late int? _v;
   late String? _comment;
   ///
   S7Point({
@@ -17,18 +19,20 @@ class S7Point {
     required String type,
     required int offset,
     required int? bit,
-    required int? threshHold,
+    required int? threshold,
     required int? h,
     required int? a,
+    required int? v,
     required String? comment,
   }) : 
     _name = name,
     _type = type,
     _offset = offset,
     _bit = bit,
-    _threshold = threshHold,
+    _threshold = threshold,
     _h = h,
     _a = a,
+    _v = v,
     _comment = comment;
   ///
   S7Point.fromMap(String name, Map config) : _name = name {
@@ -39,24 +43,15 @@ class S7Point {
     _threshold = config['threshold'];
     _h = config['h'];
     _a = config['a'];
+    _v = config['v'];
     _comment = config['comment'];
-  }
-  /// from string list
-  S7Point.fromList(String name, List<String> list) : _name = name {
-    log(_debug, '[$S7Point.fromList] $name: ', list);
-    _type = list[1];
-    _offset = double.tryParse(list[2])?.toInt() ?? 0;
-    _bit = int.tryParse(list[3]);
-    _threshold = int.tryParse(list[4]);
-    _h = int.tryParse(list[5]);
-    _a = int.tryParse(list[6]);
-    _comment = list[7];    
   }
   ///
   @override
   bool operator ==(Object other) =>
     other is S7Point 
     // && other.runtimeType == runtimeType
+    && other.v == _v
     && other.name == _name
     && other.type == _type
     && other.offset == _offset
@@ -70,9 +65,14 @@ class S7Point {
   String get type => _type;
   int get offset => _offset;
   int? get bit => _bit;
+  /// if [threshold] > 0 then smoothing activated with given factor
   int? get threshold => _threshold;
+  /// if [h] > 0 then history activated
   int? get h => _h;
+  /// Alarm class
   int? get a => _a;
+  /// If true then tag is virtual, not present in the controller
+  int? get v => _v;
   String? get comment => _comment;
   ///
   void setName(String value) {
@@ -83,45 +83,67 @@ class S7Point {
     _type = value;
   }
   ///
-  Failure? setOffset(Object? value) {
-    return _parseInt(_offset, value);
+  Result<int> setOffset(String? value) {
+    final result = _parseInt(value);
+    if (result.hasData) {
+      _offset = result.data!;
+    }
+    return result;
   }
   ///
-  Failure? setBit(Object? value) {
-    return _parseInt(_bit, value);
+  Result<int> setBit(String? value) {
+    final result = _parseInt(value);
+    _bit = result.data;
+    return result;
   }
   ///
-  Failure? setThreshold(Object? value) {
-    return _parseInt(_threshold, value);
+  Result<int> setThreshold(String? value) {
+    final result = _parseInt(value);
+    _threshold = result.data;
+    return result;
   }
   ///
-  Failure? setH(Object? value) {
-    return _parseInt(_h, value);
+  Result<int> setH(String? value) {
+    final result = _parseInt(value);
+    _h = result.data;
+    return result;
   }
   ///
-  Failure? setA(Object? value) {
-    return _parseInt(_a, value);
+  Result<int> setA(String? value) {
+    final result = _parseInt(value);
+    _a = result.data;
+    return result;
+  }
+  ///
+  Result<int> setV(String value) {
+    final result = _parseInt(value);
+    _v = result.data;
+    return result;
   }
   ///
   void setComment(String? value) {
     _comment = value;
   }
   ///
-  Failure? _parseInt(int? target, Object? value) {
+  Result<int> _parseInt(String? value, {int? defaultValue = null}) {
     final intValue = int.tryParse('$value');
     if (intValue != null) {
-      target = intValue;
-      return null;
+      return Result<int>(
+        data: intValue,
+      );
     } else {
-      return Failure.convertion(
-        message: 'Ошибка int.tryParse в методе $runtimeType.setH на значении "$value"', 
-        stackTrace: StackTrace.current,
+      return Result<int>(
+        data: defaultValue,
+        error: Failure.convertion(
+          message: 'Ошибка в методе $runtimeType._parseInt недопустимое значении "$value"', 
+          stackTrace: StackTrace.current,
+        ),
       );
     }
   }
   ///
   @override
   String toString() {
-    return 'name: $_name; type: $_type; offset: $_offset; bit: $_bit; threshold: $_threshold; h: $_h; a: $_a; comment: $_comment';
+    return 'name: $_name:\n\tv: $_v; type: $_type; offset: $_offset; bit: $_bit; threshold: $_threshold; h: $_h; a: $_a; comment: $_comment';
   }
 }

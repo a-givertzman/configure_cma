@@ -1,21 +1,21 @@
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
-import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
+import 'package:configure_cma/presentation/home/widgets/point_row_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/row_widget.dart';
+import 'package:configure_cma/presentation/home/widgets/s7_point_marked.dart';
 import 'package:flutter/material.dart';
 
 class S7PointWidget extends StatefulWidget {
-  final List<S7Point> _points;
+  final Map<String, S7PointMarked> points;
   final Map<String, S7Point>? _newPoints;
   final Map<String, int>? _flex;
   ///
   S7PointWidget({
     Key? key,
-    required List<S7Point> points,
+    required this.points,
     Map<String, S7Point>? newPoints,
     Map<String, int>? flex,
   }) : 
-    _points = points,
     _newPoints = newPoints,
     _flex = flex,
     super(key: key);
@@ -28,36 +28,81 @@ class S7PointWidget extends StatefulWidget {
 class _S7PointWidgetState extends State<S7PointWidget> {
   static const _debug = true;
   ///
+  bool _isDeleted(String key, Map<String, S7Point>? newPoints) {
+    if (newPoints == null) {
+      return false;
+    } else if (newPoints.isEmpty) {
+      return true;
+    } else {
+      if (!newPoints.containsKey(key)) log(_debug, '[_S7PointWidgetState._isDeleted] deleted: ', key);
+      return !newPoints.containsKey(key);
+    }
+  }
+  ///
+  bool _isNew(String key, Map<String, S7Point> points) {
+    if (!points.keys.contains(key)) log(_debug, '[_S7PointWidgetState._buildPointList] NEW: ', key);
+    return ! points.keys.contains(key);
+  }
+  ///
+  void _buildPointList() {
+    // final Map<String, S7PointMarked> oldPoints = Map.from(widget._points);
+    final newPoints = widget._newPoints;
+    if (newPoints != null) {
+      newPoints.forEach((key, value) {
+        // log(_debug, '[_S7PointWidgetState._buildPointList] check for new: $key: ', value);
+        if (_isNew(key, widget.points)) {
+          widget.points[key] = S7PointMarked(value, isNew: true);
+        }
+      });
+
+      widget.points.forEach((key, point) {
+        if (_isDeleted(key, newPoints)) {
+          point.setIsDeleted();
+        }
+      });
+    }
+  }
+  ///
   @override
   Widget build(BuildContext context) {
+    _buildPointList();
     Color? color = null;
-    final flex = widget._flex ?? {'name': 1, 'type': 1, 'offset': 1, 'bit': 1, 'threshold': 1, 'h': 1, 'a': 1, 'comment': 1};
+    final flex = widget._flex ?? {'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15};
     const borderColor = Colors.white10;
+    log(_debug, '[$_S7PointWidgetState.build] _points: ');
     return Column(
       children: [
         RowWidget(
           color: color,
           borderColor: borderColor,
-          values: ['name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'comment'],
-          flex: [flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['comment']!],
+          values: ['v', 'name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'comment'],
+          flex: [flex['v']!, flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['comment']!],
+          tooltips: [
+            'Виртуальный сигнал, в контроллере отсутствует, используется в DataServer для диагностики и математики',
+            'Имя тега, читается из конфигурации контроллера',
+            'Тип тэга, читается из конфигурации контроллера',
+            'Адрес тэга, читается из конфигурации контроллера',
+            'Номер бита для тэгов типа Bool, читается из конфигурации контроллера',
+            'Threshold - Порог нечувствительности тэга',
+            'Атрибут записи в историю, активируется если 1, отключается если не указан',
+            'Класс аварии, активируется если от 1 до 15, отключается если не указан',
+            'Комментарий, может читаться из конфигурации контроллера, если указан',
+          ],
         ),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: widget._points.length,
+          itemCount: widget.points.length,
           itemBuilder: ((context, index) {
-              final point = widget._points[index];
-              final newPoint = widget._newPoints?[point.name];
-              if (newPoint != null) log(_debug, '\npoint:  $point\nnPoint: $newPoint');
-              // if (widget._newPoints != null) {
-              //   if (point != newPoint) {
-              //     color = Theme.of(context).stateColors.error.withAlpha(100);
-              //   }
-              // }
+              final pointMarked = widget.points.values.elementAt(index);
+              final key = pointMarked.name;
+              final newPoint = widget._newPoints?[key];
+              // color = null;
+              log(_debug, pointMarked);
               return PointRowWidget(
-                color: color,
+                color: null,
                 borderColor: borderColor,
-                point: point,
+                point: pointMarked,
                 newPoint: newPoint,
                 flex: widget._flex,
               );
@@ -68,96 +113,5 @@ class _S7PointWidgetState extends State<S7PointWidget> {
   }
 }
 
-///
-class PointRowWidget extends StatelessWidget {
-  final Color? color;
-  final Color borderColor;
-  final S7Point _point;
-  final S7Point? newPoint;
-  final Map<String, int>? _flex;
-  const PointRowWidget({
-    super.key,
-    required this.color,
-    required this.borderColor,
-    required S7Point point,
-    this.newPoint,
-    Map<String, int>? flex,
-  }) : 
-    _point = point,
-    _flex = flex;
-  ///
-  @override
-  Widget build(BuildContext context) {
-    final flex = _flex;
-    return Row(
-      children: [
-        CellWidget<String>(
-          flex: flex != null ? flex['name'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.name,
-          newData: newPoint?.name,
-          onChanged: (value) => _point.setName(value),
-        ),
-        CellWidget<String>(
-          flex: flex != null ? flex['type'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.type,
-          newData: newPoint?.type,
-          onChanged: (value) => _point.setType(value),
-        ),
-        CellWidget<int?>(
-          flex: flex != null ? flex['offset'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.offset,
-          newData: newPoint?.offset,
-          onChanged: (value) => _point.setOffset(value),
-        ),
-        CellWidget<int?>(
-          flex: flex != null ? flex['bit'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.bit,
-          newData: newPoint?.bit,
-          onChanged: (value) => _point.setBit(value),
-        ),
-        CellWidget<int?>(
-          flex: flex != null ? flex['threshold'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.threshold,
-          newData: newPoint?.threshold,
-          onChanged: (value) => _point.setThreshold(value),
-        ),
-        CellWidget<int?>(
-          flex: flex != null ? flex['h'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.h,
-          newData: newPoint?.h,
-          onChanged: (value) => _point.setH(value),
-        ),
-        CellWidget<int?>(
-          flex: flex != null ? flex['a'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.a,
-          newData: newPoint?.a,
-          onChanged: (value) => _point.setA(value),
-        ),
-        CellWidget<String?>(
-          flex: flex != null ? flex['comment'] ?? 1 : 1,
-          color: color,
-          borderColor: borderColor,
-          data: _point.comment,
-          newData: newPoint?.comment,
-          onChanged: (value) => _point.setComment(value),
-        ),
-      ],
-    );
-  }
-}
 
 

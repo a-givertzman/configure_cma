@@ -1,18 +1,19 @@
 import 'package:configure_cma/domain/core/log/log.dart';
 
-abstract class Failure<T> {
+class Failure<T> {
   static const _debug = true;
   late T message;
 ///
 /// Ganeral Failures
-  factory Failure({
+  Failure({
     required T message, 
     required StackTrace stackTrace,
   }) {
     // TODO: implement error reporting here
     log(_debug, message);
     log(_debug, stackTrace);
-    throw UnimplementedError(message.toString());
+    // return Failure(message: message, stackTrace: stackTrace);
+    // throw UnimplementedError(message.toString());
   }
   //
   // dataSource failure
