@@ -126,13 +126,12 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    setState(() {
-                      db.newPoint();
-                    });
+                    db.points.removeWhere((key, point) => point.isSelected);
+                    setState(() {});
                   }, 
                   icon: Tooltip(
                     child: Icon(Icons.highlight_remove_outlined, color: Theme.of(context).colorScheme.error),
-                    message: 'Add new tag to the current DB',
+                    message: 'Remove selected tags from current DB',
                   ),
                 ),
               ],
