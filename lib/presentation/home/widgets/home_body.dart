@@ -76,6 +76,7 @@ class _HomeBodyState extends State<HomeBody> {
                       onComplete: (value) {
                         
                       },
+                      icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   IconButton(onPressed: null, icon: Icon(null)),
@@ -114,6 +115,7 @@ class _HomeBodyState extends State<HomeBody> {
                         setState(() => _state.setLoaded());
                       });
                     },
+                    icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 IconButton(
@@ -138,7 +140,7 @@ class _HomeBodyState extends State<HomeBody> {
                     setState(() {});
                   }, 
                   icon: Tooltip(
-                    child: Icon(Icons.file_upload),
+                    child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
                     message: 'Save config',
                   ),
                 ),                  

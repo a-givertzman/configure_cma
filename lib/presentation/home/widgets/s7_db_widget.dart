@@ -4,11 +4,13 @@ import 'package:configure_cma/domain/core/entities/s7_db.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/result/result.dart';
+import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_point_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class S7DbWidget extends StatefulWidget {
   final List<S7Db> _dbs;
@@ -106,7 +108,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                       });
                     },
                     icon: Tooltip(
-                      child: Icon(Icons.file_download),
+                      child: Icon(Icons.file_download, color: Theme.of(context).colorScheme.primary),
                       message: 'Update DB config from file',
                     ),
                   ),
@@ -118,7 +120,18 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                     });
                   }, 
                   icon: Tooltip(
-                    child: Icon(Icons.add),
+                    child: Icon(Icons.add_circle_outline, color: Theme.of(context).stateColors.on,),
+                    message: 'Add new tag to the current DB',
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      db.newPoint();
+                    });
+                  }, 
+                  icon: Tooltip(
+                    child: Icon(Icons.highlight_remove_outlined, color: Theme.of(context).colorScheme.error),
                     message: 'Add new tag to the current DB',
                   ),
                 ),

@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class SelectDirWidget extends StatefulWidget {
   final void Function(String? value)? _onComplete;
   final String? labelText;
+  final Widget icon;
   ///
   SelectDirWidget({
     Key? key,
     void Function(String? value)? onComplete,
     this.labelText,
+    required this.icon,
   }) :
     _onComplete = onComplete,
     super(key: key);
@@ -48,7 +50,7 @@ class _SelectDirWidgetState extends State<SelectDirWidget> {
               }      
             });
           }, 
-          icon: Icon(Icons.more_horiz),
+          icon: widget.icon,
         ),        
       ],
     );

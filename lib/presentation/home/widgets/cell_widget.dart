@@ -67,21 +67,23 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
         ),
         child: Tooltip(
           message: widget._tooltip,
-          child: TextFormField(
-            readOnly: widget._readOnly,
-            controller: _editingController,
-            decoration: InputDecoration(
-              isDense: true,
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.1),
+          child: RepaintBoundary(
+            child: TextFormField(
+              readOnly: widget._readOnly,
+              controller: _editingController,
+              decoration: InputDecoration(
+                isDense: true,
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.1),
+              ),
+              maxLines: 1,
+              onChanged: (value) {
+                final onChacnged = widget._onChanged;
+                if (onChacnged != null) {
+                  onChacnged(value);
+                }
+              },
             ),
-            maxLines: 1,
-            onChanged: (value) {
-              final onChacnged = widget._onChanged;
-              if (onChacnged != null) {
-                onChacnged(value);
-              }
-            },
           ),
         ),
       ),
