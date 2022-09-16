@@ -5,6 +5,7 @@ class S7Line {
   static const _debug = true;
   final String _name;
   late Map<String, S7Ied> _ieds;
+  ///
   S7Line(String name, Map<String, dynamic> config) : _name = name{
     log(_debug, '[S7Line] ', name);
     // log(_debug, '\n[S7Line] config: ', config);
@@ -17,10 +18,11 @@ class S7Line {
   }
   String get name => _name;
   Map<String, S7Ied> get ieds => _ieds;
+  ///
   Map<String, dynamic> toJson() {
     return _ieds.map((iedKey, ied) {
       return MapEntry(
-        iedKey, 
+        ied.name, 
         {
           "description": ied.description,
           "ip": ied.ip,
@@ -28,7 +30,7 @@ class S7Line {
           "slot": ied.slot,
           "db": ied.dbs.map((dbKey, db) {
             return MapEntry(
-              dbKey, 
+              db.name, 
               {
                 "description": db.description,
                 "number": db.number,
@@ -37,7 +39,7 @@ class S7Line {
                 "delay": db.delay,
                 "data": db.points.map((pointKey, point) {
                   return MapEntry(
-                    pointKey, 
+                    point.name, 
                     {
                       "type": point.type,
                       "offset": point.offset,

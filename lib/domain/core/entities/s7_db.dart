@@ -65,4 +65,17 @@ class S7Db {
   int get size => _size;
   int get delay => _delay;
   Map<String, S7PointMarked> get points => _points;
+  ///
+  void newPoint() {
+    final point =  S7PointMarked(
+      S7Point(
+        name: 'new',
+        type: 'Int',
+        offset: 0,
+      ),
+    );
+    _points.addAll({
+      "new": point,
+    });
+  }
 }

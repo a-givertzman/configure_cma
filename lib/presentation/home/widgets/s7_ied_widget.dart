@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 
 class S7IedWidget extends StatefulWidget {
   final List<S7Ied> _ieds;
-  bool _resetNewPoints = false;
+  final List<bool> _resetNewPoints;
   ///
   S7IedWidget({
     Key? key,
     required List<S7Ied> ieds,
-    bool? resetNewPoints,
+    List<bool>? resetNewPoints,
   }) : 
     _ieds = ieds,
-    _resetNewPoints = resetNewPoints ?? false,
+    _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
   ///
   @override

@@ -65,7 +65,7 @@ class _SelectDirWidgetState extends State<SelectFileWidget> {
             });
           }, 
           icon: widget.icon,
-        ),        
+        ),
       ],
     );
   }

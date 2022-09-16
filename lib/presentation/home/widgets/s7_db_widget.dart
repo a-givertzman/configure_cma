@@ -12,15 +12,15 @@ import 'package:flutter/material.dart';
 
 class S7DbWidget extends StatefulWidget {
   final List<S7Db> _dbs;
-  bool _resetNewPoints = false;
+  final List<bool> _resetNewPoints;
   ///
   S7DbWidget({
     Key? key,
     required List<S7Db> dbs,
-    bool? resetNewPoints,
+    List<bool>? resetNewPoints,
   }) : 
     _dbs = dbs,
-    _resetNewPoints = resetNewPoints ?? false,
+    _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
   ///
   @override
@@ -29,15 +29,14 @@ class S7DbWidget extends StatefulWidget {
 
 //
 class _S7DbWidgetState extends State<S7DbWidget> {
-  static const _debug = true;
-  String? _newConfigPath;
-  List<S7Db>? _newDbs;
+  // static const _debug = true;
   Map<String, S7Point>? _newPoints;
   bool _isReading = false;
   ///
   @override
   Widget build(BuildContext context) {
-    if (widget._resetNewPoints) {
+    if (widget._resetNewPoints.isNotEmpty) {
+      widget._resetNewPoints.clear();
       _newPoints = null;
     }
     return ListView.builder(
@@ -46,7 +45,6 @@ class _S7DbWidgetState extends State<S7DbWidget> {
       itemCount: widget._dbs.length,
       itemBuilder: ((context, index) {
         final db = widget._dbs[index];
-        final newDb = _newDbs?[index];
         final color = Theme.of(context).colorScheme.primary.withAlpha(50);
         const borderColor = Colors.white10;
         return Column(
@@ -111,6 +109,17 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                       child: Icon(Icons.file_download),
                       message: 'Update DB config from file',
                     ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      db.newPoint();
+                    });
+                  }, 
+                  icon: Tooltip(
+                    child: Icon(Icons.add),
+                    message: 'Add new tag to the current DB',
                   ),
                 ),
               ],

@@ -66,6 +66,8 @@ class _S7PointWidgetState extends State<S7PointWidget> {
   @override
   Widget build(BuildContext context) {
     _buildPointList();
+    final points = widget.points.values.toList();
+    points.sort((a, b) => a.offset.compareTo(b.offset));
     Color? color = null;
     final flex = widget._flex ?? {'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15};
     const borderColor = Colors.white10;
@@ -92,9 +94,9 @@ class _S7PointWidgetState extends State<S7PointWidget> {
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: widget.points.length,
+          itemCount: points.length,
           itemBuilder: ((context, index) {
-              final pointMarked = widget.points.values.elementAt(index);
+              final pointMarked = points.elementAt(index);
               final key = pointMarked.name;
               final newPoint = widget._newPoints?[key];
               // color = null;

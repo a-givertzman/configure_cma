@@ -34,7 +34,7 @@ class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
   String? _dataServerConfigPath;
   Map<String, S7Line> _lines = {};
-  bool _resetNewPoints = false;
+  List<bool> _resetNewPoints = [];
   /// 
   /// Builds home body widget
   @override
@@ -98,13 +98,16 @@ class _HomeBodyState extends State<HomeBody> {
                     labelText: 'Path to DataServer config file',
                     allowedExtensions: ['conf', 'cfg', 'json'],
                     onComplete: (value) {
-                      setState(() => _state.setLoading());
+                      setState(() {
+                        _lines = {};
+                        _state.setLoading();
+                      });
                       _dataServerConfigPath = value;
                       _readConfigFile(value).then((lines) {
                         if (lines.isNotEmpty) {
                           setState(() {
                             _lines = lines;
-                            _resetNewPoints = true;
+                            _resetNewPoints.add(true);
                             log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
                           });
                         }
