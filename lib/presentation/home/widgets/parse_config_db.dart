@@ -44,6 +44,7 @@ class ParseConfigDb {
       if (_state == ParseState.structOpen) {
         final tagName = RegExp(r'\b\w+\b').firstMatch(line)?[0];
         final tagType = RegExp(r':\s(\b\w+\b)').firstMatch(line)?[1];
+        final tagComment = RegExp(r';\s+\/\/(.+)$').firstMatch(line)?[1]?.trim();
         if (matchStructOpen != null) {
           _offset.add('$tagType');
           ParseConfigDb(
@@ -56,13 +57,14 @@ class ParseConfigDb {
           _state = ParseState.structClose;
           // log(_debug, '$_path: CLOSE');
         } else {
+          _offset.add('$tagType');
           _result['$_path$tagName'] = {
             'type': tagType, 
             'offset': _offset.value, 
             'bit': DsDataType.fromString('$tagType') == DsDataType.bool() ? _offset.bit : null,
+            'comment': tagComment,
           };
           // log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
-          _offset.add('$tagType');
         }
       }
       if (_state == ParseState.structClose) {
@@ -101,6 +103,7 @@ class ParseOffset {
   int _value;
   int _bit;
   bool _isBool = false;
+  int _length = 0;
   ///
   ParseOffset({
     int value = 0, 
@@ -111,7 +114,7 @@ class ParseOffset {
   ///
   add(String tagTypeName) {
     final tagType = DsDataType.fromString('$tagTypeName');
-    final offset = tagType.length;
+    _length = tagType.length;
     if (_isBool && tagType == DsDataType.bool()) {
       _bit++;
     } else {
@@ -122,13 +125,12 @@ class ParseOffset {
         if (_isBool) {
           _bit = 0;
           _isBool = false;
-          _value += DsDataType.bool().length;
         }
-        _value += offset;
       }
+      _value += _length;
     }
   }
   ///
-  int get value => _value;
+  int get value => _value - _length;
   int get bit => _bit;
 }

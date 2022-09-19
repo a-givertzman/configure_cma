@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
+import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/domain/core/result/result.dart';
+import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_point_marked.dart';
 
 class S7Db {
@@ -11,6 +16,8 @@ class S7Db {
   late int _size;
   late int _delay;
   late Map<String, S7PointMarked> _points;
+  late Map<String, S7Point>? _newPoints = null;
+  bool _isReading = false;
   ///
   S7Db({
     required String name, 
@@ -65,6 +72,82 @@ class S7Db {
   int get size => _size;
   int get delay => _delay;
   Map<String, S7PointMarked> get points => _points;
+  Map<String, S7Point>? get newPoints => _newPoints;
+  ///
+  void clearNewPoints() {
+    _newPoints = null;
+  }
+  ///
+  bool _isDeleted(String? key, Map<String, S7Point>? newPoints) {
+    if (newPoints == null) {
+      return false;
+    } else if (newPoints.isEmpty) {
+      return true;
+    } else {
+      if (!newPoints.containsKey(key)) log(_debug, '[_S7PointWidgetState._isDeleted] deleted: ', key);
+      return !newPoints.containsKey(key);
+    }
+  }
+  ///
+  bool _isNew(String? key, Map<String, S7Point> points) {
+    if (!points.keys.contains(key)) log(_debug, '[_S7PointWidgetState._buildPointList] NEW: ', key);
+    return ! points.keys.contains(key);
+  }
+  ///
+  void comparePoints() {
+    final newPoints = _newPoints;
+    if (newPoints != null) {
+      newPoints.forEach((key, value) {
+        // log(_debug, '[S7Db.comparePoints] check for new: $key: ', value);
+        if (_isNew(newPoints[key]?.name, _points)) {
+          _points[key] = S7PointMarked(value, isNew: true);
+        }
+      });
+
+      _points.forEach((key, point) {
+        if (_isDeleted(point.name, newPoints)) {
+          point.setIsDeleted();
+        } else {
+          point.update(newPoints[point.name]);
+        }
+      });
+    }
+  }
+  ///
+  Future<Result<bool>> updateFromDbFile(String? path) async {
+    if (!_isReading) {
+      _isReading = true;
+      if (path != null) {
+        final file = File(path);
+        return file.readAsLines().then((lines) {
+          _isReading = false;
+          _newPoints = ParseConfigDb(
+            lines: lines,
+            offset: ParseOffset(),
+          )
+          .parse()
+          .map<String, S7Point>((key, value) {
+            return MapEntry<String, S7Point>(
+              key, 
+              S7Point.fromMap(key, value as Map),
+            );
+          });
+          comparePoints();
+          return Result(data: true);
+        });
+      } else {
+        return Result(
+          error: Failure.convertion(message: '[$S7Db._readDbFile] path can\'t bee null', 
+          stackTrace: StackTrace.current),
+        );
+      }
+    } else {
+      return Result(
+        error: Failure.convertion(message: '[$S7Db._readDbFile] Not ready', 
+        stackTrace: StackTrace.current),
+      );
+    }
+  }
   ///
   void newPoint() {
     final point =  S7PointMarked(

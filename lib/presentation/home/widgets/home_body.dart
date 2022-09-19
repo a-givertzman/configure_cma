@@ -38,7 +38,6 @@ class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
   String? _dataServerConfigPath;
   Map<String, S7Line> _lines = {};
-  List<bool> _resetNewPoints = [];
   /// 
   /// Builds home body widget
   @override
@@ -103,6 +102,9 @@ class _HomeBodyState extends State<HomeBody> {
                     labelText: 'Path to DataServer config file',
                     allowedExtensions: ['conf', 'cfg', 'json'],
                     onComplete: (value) {
+                      if (_state.isSaving || _state.isLoading) {
+                        return;
+                      }
                       setState(() {
                         _lines = {};
                         _state.setLoading();
@@ -112,10 +114,10 @@ class _HomeBodyState extends State<HomeBody> {
                         if (lines.isNotEmpty) {
                           setState(() {
                             _lines = lines;
-                            _resetNewPoints.add(true);
                             log(_debug, '[_HomeBodyState.build] lines count: ', _lines.length);
                           });
                         }
+                      }).whenComplete(() {
                         setState(() => _state.setLoaded());
                       });
                     },
@@ -125,23 +127,39 @@ class _HomeBodyState extends State<HomeBody> {
                 IconButton(
                   onPressed: () async {
                     log(_debug, '[$_HomeBodyState.build] SAVING');
-                    final dir = dirname(_dataServerConfigPath ?? '');
-                    final path = join(dir, 'confNew.json');
-                    final file = File(path);
-                    if (!file.existsSync()) {
-                      await file.create(recursive: true);
+                    if (_state.isSaving || _state.isLoading) {
+                      return;
                     }
-                    final encoder = new JsonEncoder.withIndent("    ");
-                    final json = encoder.convert(
-                      _lines.map((key, line) {
-                        return MapEntry(
-                          key, 
-                          line,
-                        );
-                      })
-                    );
-                    await file.writeAsString(json);
-                    setState(() {});
+                    final dataServerConfigPath = _dataServerConfigPath;
+                    if (dataServerConfigPath != null) {
+                      setState(() {
+                        _state.setSaving();
+                      });
+                      final dir = dirname(dataServerConfigPath);
+                      final name = basename(dataServerConfigPath);
+                      // final path = join(dir, 'confNew.json');
+                      final backupFile = File(dataServerConfigPath);
+                      final t = DateTime.now();
+                      final timeTag = '${t.year}.${t.month}.${t.day}_${t.hour}.${t.minute}.${t.second}_';
+                      backupFile.rename(join(dir, '$timeTag$name'));
+                      final file = File(dataServerConfigPath);
+                      if (!file.existsSync()) {
+                        await file.create(recursive: true);
+                      }
+                      final encoder = new JsonEncoder.withIndent("    ");
+                      final json = encoder.convert(
+                        _lines.map((key, line) {
+                          return MapEntry(
+                            key, 
+                            line,
+                          );
+                        })
+                      );
+                      await file.writeAsString(json);
+                      setState(() {
+                        _state.setSaved();
+                      });
+                    }
                   }, 
                   icon: Tooltip(
                     child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
@@ -189,11 +207,19 @@ class _HomeBodyState extends State<HomeBody> {
           Text('Loading...'),
         ],
       );
+    } else if (_state.isSaving) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          Text('Saving...'),
+        ],
+      );
     } else if (_lines.isNotEmpty) {
       return S7LineWidget(
         dsClient: widget._dsClient,
         lines: _lines.values.toList(),
-        resetNewPoints: _resetNewPoints,
       );
     } else {
       return Center(child: Text('Now data'));

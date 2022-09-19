@@ -31,48 +31,18 @@ class S7PointWidget extends StatefulWidget {
 class _S7PointWidgetState extends State<S7PointWidget> {
   static const _debug = true;
   ///
-  bool _isDeleted(String? key, Map<String, S7Point>? newPoints) {
-    if (newPoints == null) {
-      return false;
-    } else if (newPoints.isEmpty) {
-      return true;
-    } else {
-      if (!newPoints.containsKey(key)) log(_debug, '[_S7PointWidgetState._isDeleted] deleted: ', key);
-      return !newPoints.containsKey(key);
-    }
-  }
-  ///
-  bool _isNew(String? key, Map<String, S7Point> points) {
-    if (!points.keys.contains(key)) log(_debug, '[_S7PointWidgetState._buildPointList] NEW: ', key);
-    return ! points.keys.contains(key);
-  }
-  ///
-  void _buildPointList() {
-    // final Map<String, S7PointMarked> oldPoints = Map.from(widget._points);
-    final newPoints = widget._newPoints;
-    if (newPoints != null) {
-      newPoints.forEach((key, value) {
-        // log(_debug, '[_S7PointWidgetState._buildPointList] check for new: $key: ', value);
-        if (_isNew(newPoints[key]?.name, widget.points)) {
-          widget.points[key] = S7PointMarked(value, isNew: true);
-        }
-      });
-
-      widget.points.forEach((key, point) {
-        if (_isDeleted(point.name, newPoints)) {
-          point.setIsDeleted();
-        } else {
-          point.update(newPoints[point.name]);
-        }
-      });
-    }
-  }
-  ///
   @override
   Widget build(BuildContext context) {
-    _buildPointList();
+    // _buildPointList();
     final points = widget.points.values.toList();
-    points.sort((a, b) => a.offset.compareTo(b.offset));
+    points.sort((a, b) {
+      if (a.bit != null && b.bit != null) {
+        if (a.offset == b.offset) {
+          return a.bit!.compareTo(b.bit!);
+        }
+      }
+      return a.offset.compareTo(b.offset);
+    });
     Color? color = null;
     final flex = widget._flex ?? {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15};
     const borderColor = Colors.white10;

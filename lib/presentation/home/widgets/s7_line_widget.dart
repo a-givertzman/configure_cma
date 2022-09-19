@@ -6,18 +6,15 @@ import 'package:flutter/material.dart';
 
 class S7LineWidget extends StatefulWidget {
   final List<S7Line> _lines;
-  final List<bool> _resetNewPoints;
   final DsClient? _dsClient;
   ///
   S7LineWidget({
     Key? key,
     DsClient? dsClient,
     required List<S7Line> lines,
-    List<bool>? resetNewPoints,
   }) : 
     _dsClient = dsClient,
     _lines = lines,
-    _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
   ///
   @override
@@ -47,7 +44,6 @@ class _S7LineWidgetState extends State<S7LineWidget> {
               S7IedWidget(
                 dsClient: widget._dsClient,
                 ieds: line.ieds.values.toList(),
-                resetNewPoints: widget._resetNewPoints,
               ),
             ],
           );

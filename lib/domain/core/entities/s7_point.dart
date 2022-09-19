@@ -110,43 +110,43 @@ class S7Point {
   void update(S7Point? newPoint) {
     if (newPoint != null) {
       if (_type != newPoint.type) {
-        _typeOld = newPoint.type;
-        _type = newPoint.type;
+        _typeOld = '$_type';
+        _type = '${newPoint.type}';
         _typeIsUpdated = true;
       }
       if (_offset != newPoint.offset) {
-        _offsetOld = newPoint.offset;
+        _offsetOld = _offset;
         _offset = newPoint.offset;
         _offsetIsUpdated = true;
       }
       if (_bit != newPoint.bit) {
-        _bitOld = newPoint.bit;
+        _bitOld = _bit;
         _bit = newPoint.bit;
         _bitIsUpdated = true;
       }
       if (_threshold != newPoint.threshold) {
-        _thresholdOld = newPoint.threshold;
+        _thresholdOld = _threshold;
         _threshold = newPoint.threshold;
         _thresholdIsUpdated = true;
       }
       if (_h != newPoint.h) {
-        _hOld = newPoint.h;
+        _hOld = _h;
         _h = newPoint.h;
         _hIsUpdated = true;
       }
       if (_a != newPoint.a) {
-        _aOld = newPoint.a;
+        _aOld = _a;
         _a = newPoint.a;
         _aIsUpdated = true;
       }
       if (_v != newPoint.v) {
-        _vOld = newPoint.v;
+        _vOld = _v;
         _v = newPoint.v;
         _vIsUpdated = true;
       }
       if (_comment != newPoint.comment) {
-        _commentOld = newPoint.comment;
-        _comment = newPoint.comment;
+        _commentOld = '$_comment';
+        _comment = '${newPoint.comment}';
         _commentIsUpdated = true;
       }
     }

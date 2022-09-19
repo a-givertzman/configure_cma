@@ -43,6 +43,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
   Widget build(BuildContext context) {
     final flex = widget._flex;
     Color? color;
+    Color? isUpdatedColor = Colors.yellow.withAlpha(200);
     if (widget._point.isNew) {
       color = Theme.of(context).stateColors.on.withAlpha(100);
     } else if (widget._point.isDeleted) {
@@ -92,7 +93,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<String>(
             flex: flex != null ? flex['type'] ?? 1 : 1,
-            color: widget._point.aIsUpdated ? Colors.yellow.withAlpha(200) : color,
+            color: widget._point.typeIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.type,
             onChanged: (value) => widget._point.setType(value),
@@ -100,7 +101,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['offset'] ?? 1 : 1,
-            color: color,
+            color: widget._point.offsetIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.offset,
             onChanged: (value) => widget._point.setOffset(value),
@@ -108,7 +109,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['bit'] ?? 1 : 1,
-            color: color,
+            color: widget._point.bitIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.bit,
             onChanged: (value) => widget._point.setBit(value),
@@ -116,7 +117,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['threshold'] ?? 1 : 1,
-            color: color,
+            color: widget._point.thresholdIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.threshold,
             onChanged: (value) => widget._point.setThreshold(value),
@@ -124,7 +125,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['h'] ?? 1 : 1,
-            color: color,
+            color: widget._point.hIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.h,
             onChanged: (value) => widget._point.setH(value),
@@ -132,7 +133,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['a'] ?? 1 : 1,
-            color: color,
+            color: widget._point.aIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.a,
             onChanged: (value) => widget._point.setA(value),
@@ -140,7 +141,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           ),
           CellWidget<String>(
             flex: flex != null ? flex['comment'] ?? 1 : 1,
-            color: color,
+            color: widget._point.commentIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
             data: widget._point.comment,
             onChanged: (value) => widget._point.setComment(value),

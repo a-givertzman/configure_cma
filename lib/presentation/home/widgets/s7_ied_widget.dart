@@ -6,18 +6,15 @@ import 'package:flutter/material.dart';
 
 class S7IedWidget extends StatefulWidget {
   final List<S7Ied> _ieds;
-  final List<bool> _resetNewPoints;
   final DsClient? _dsClient;
   ///
   S7IedWidget({
     Key? key,
     DsClient? dsClient,
     required List<S7Ied> ieds,
-    List<bool>? resetNewPoints,
   }) : 
     _dsClient = dsClient,
     _ieds = ieds,
-    _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
   ///
   @override
@@ -77,7 +74,6 @@ class _S7IedWidgetState extends State<S7IedWidget> {
               S7DbWidget(
                 dsClient: widget._dsClient,
                 dbs: ied.dbs.values.toList(),
-                resetNewPoints: widget._resetNewPoints,
               ),
             ],
           );
