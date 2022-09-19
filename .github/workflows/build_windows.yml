@@ -15,9 +15,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      - run: |
-          echo "::add-path::$GITHUB_WORKSPACE/flutter/bin"
         
       - name: Install dependencies
         run: flutter pub get
