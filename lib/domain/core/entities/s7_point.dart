@@ -13,6 +13,22 @@ class S7Point {
   late int? _a;
   late int? _v;
   late String? _comment;
+  late String? _typeOld = null;
+  late int? _offsetOld = null;
+  late int? _bitOld = null;
+  late int? _thresholdOld = null;
+  late int? _hOld = null;
+  late int? _aOld = null;
+  late int? _vOld = null;
+  late String? _commentOld = null;
+  late bool _typeIsUpdated = false;
+  late bool _offsetIsUpdated = false;
+  late bool _bitIsUpdated = false;
+  late bool _thresholdIsUpdated = false;
+  late bool _hIsUpdated = false;
+  late bool _aIsUpdated = false;
+  late bool _vIsUpdated = false;
+  late bool _commentIsUpdated = false;
   ///
   S7Point({
     required String name, 
@@ -74,6 +90,67 @@ class S7Point {
   /// If true then tag is virtual, not present in the controller
   int? get v => _v;
   String? get comment => _comment;
+  String? get typeOld => _typeOld;
+  int? get offsetOld => _offsetOld;
+  int? get bitOld => _bitOld;
+  int? get thresholdOld => _thresholdOld;
+  int? get hOld => _hOld;
+  int? get aOld => _aOld;
+  int? get vOld => _vOld;
+  String? get commentOld => _commentOld;
+  bool get typeIsUpdated => _typeIsUpdated;
+  bool get offsetIsUpdated => _offsetIsUpdated;
+  bool get bitIsUpdated => _bitIsUpdated;
+  bool get thresholdIsUpdated => _thresholdIsUpdated;
+  bool get hIsUpdated => _hIsUpdated;
+  bool get aIsUpdated => _aIsUpdated;
+  bool get vIsUpdated => _vIsUpdated;
+  bool get commentIsUpdated => _commentIsUpdated  ;
+  ///
+  void update(S7Point? newPoint) {
+    if (newPoint != null) {
+      if (_type != newPoint.type) {
+        _typeOld = newPoint.type;
+        _type = newPoint.type;
+        _typeIsUpdated = true;
+      }
+      if (_offset != newPoint.offset) {
+        _offsetOld = newPoint.offset;
+        _offset = newPoint.offset;
+        _offsetIsUpdated = true;
+      }
+      if (_bit != newPoint.bit) {
+        _bitOld = newPoint.bit;
+        _bit = newPoint.bit;
+        _bitIsUpdated = true;
+      }
+      if (_threshold != newPoint.threshold) {
+        _thresholdOld = newPoint.threshold;
+        _threshold = newPoint.threshold;
+        _thresholdIsUpdated = true;
+      }
+      if (_h != newPoint.h) {
+        _hOld = newPoint.h;
+        _h = newPoint.h;
+        _hIsUpdated = true;
+      }
+      if (_a != newPoint.a) {
+        _aOld = newPoint.a;
+        _a = newPoint.a;
+        _aIsUpdated = true;
+      }
+      if (_v != newPoint.v) {
+        _vOld = newPoint.v;
+        _v = newPoint.v;
+        _vIsUpdated = true;
+      }
+      if (_comment != newPoint.comment) {
+        _commentOld = newPoint.comment;
+        _comment = newPoint.comment;
+        _commentIsUpdated = true;
+      }
+    }
+  }
   ///
   void setName(String value) {
     _name = value;

@@ -1,4 +1,5 @@
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_ied_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,15 @@ import 'package:flutter/material.dart';
 class S7LineWidget extends StatefulWidget {
   final List<S7Line> _lines;
   final List<bool> _resetNewPoints;
+  final DsClient? _dsClient;
   ///
   S7LineWidget({
     Key? key,
+    DsClient? dsClient,
     required List<S7Line> lines,
     List<bool>? resetNewPoints,
   }) : 
+    _dsClient = dsClient,
     _lines = lines,
     _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
@@ -20,7 +24,7 @@ class S7LineWidget extends StatefulWidget {
   State<S7LineWidget> createState() => _S7LineWidgetState();
 }
 
-
+///
 class _S7LineWidgetState extends State<S7LineWidget> {
   ///
   @override
@@ -41,6 +45,7 @@ class _S7LineWidgetState extends State<S7LineWidget> {
                 values: [line.name],
               ),
               S7IedWidget(
+                dsClient: widget._dsClient,
                 ieds: line.ieds.values.toList(),
                 resetNewPoints: widget._resetNewPoints,
               ),

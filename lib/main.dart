@@ -1,13 +1,8 @@
 import 'dart:async';
 
 import 'package:configure_cma/app_widget.dart';
-import 'package:configure_cma/domain/alarm/alarm-data.dart';
-import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
-import 'package:configure_cma/infrastructure/alarm/alarm_list_data_source.dart';
-import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
-import 'package:configure_cma/settings/communication_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:window_manager/window_manager.dart';

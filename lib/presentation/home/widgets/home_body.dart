@@ -5,6 +5,7 @@ import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_line_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_dir_widget.dart';
@@ -15,15 +16,18 @@ import 'package:path/path.dart';
 
 class HomeBody extends StatefulWidget {
   final AppUserStacked _users;
+  final DsClient? _dsClient;
   /// 
   /// Builds home body using current user
   const HomeBody({
     Key? key,
     required AppUserStacked users,
+    DsClient? dsClient,
   }) : 
     _users = users,
+    _dsClient = dsClient,
     super(key: key);
-
+  ///
   @override
   State<HomeBody> createState() => _HomeBodyState();
 }
@@ -187,6 +191,7 @@ class _HomeBodyState extends State<HomeBody> {
       );
     } else if (_lines.isNotEmpty) {
       return S7LineWidget(
+        dsClient: widget._dsClient,
         lines: _lines.values.toList(),
         resetNewPoints: _resetNewPoints,
       );

@@ -1,4 +1,5 @@
 import 'package:configure_cma/domain/core/entities/s7_ied.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_db_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,15 @@ import 'package:flutter/material.dart';
 class S7IedWidget extends StatefulWidget {
   final List<S7Ied> _ieds;
   final List<bool> _resetNewPoints;
+  final DsClient? _dsClient;
   ///
   S7IedWidget({
     Key? key,
+    DsClient? dsClient,
     required List<S7Ied> ieds,
     List<bool>? resetNewPoints,
   }) : 
+    _dsClient = dsClient,
     _ieds = ieds,
     _resetNewPoints = resetNewPoints ?? [],
     super(key: key);
@@ -71,6 +75,7 @@ class _S7IedWidgetState extends State<S7IedWidget> {
                 ],
               ),
               S7DbWidget(
+                dsClient: widget._dsClient,
                 dbs: ied.dbs.values.toList(),
                 resetNewPoints: widget._resetNewPoints,
               ),

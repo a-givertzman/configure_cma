@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class CellWidget<T> extends StatefulWidget {
   final T? _data;
-  final T? _newData;
   final int _flex;
   final Color? _color;
   final Color _borderColor;
@@ -14,7 +13,6 @@ class CellWidget<T> extends StatefulWidget {
   CellWidget({
     Key? key,
     T? data,
-    T? newData,
     int flex = 1,
     Color? color,
     Color? borderColor,
@@ -23,7 +21,6 @@ class CellWidget<T> extends StatefulWidget {
     String? tooltip,
   }) : 
     _data = data,
-    _newData = newData,
     _flex = flex,
     _color = color,
     _borderColor = borderColor ?? Colors.white10,
@@ -49,13 +46,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
   @override
   Widget build(BuildContext context) {
     const padding = AppUiSettings.padding;
-    final newData = widget._newData;
     Color? color = widget._color;
-    if (newData != null) {
-      if (widget._data != newData) {
-        color = Colors.yellow.withAlpha(100);
-      }
-    }
     _editingController.text = widget._data != null ? '${widget._data}' : '';
     return Expanded(
       flex: widget._flex,

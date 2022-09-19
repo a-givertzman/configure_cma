@@ -13,6 +13,7 @@ class TextIndicator extends StatefulWidget {
   final String _valueUnit;
   final double? _high;
   final double? _low;
+  final double? _textScaleFactor;
   ///
   const TextIndicator({
       Key? key,
@@ -21,12 +22,14 @@ class TextIndicator extends StatefulWidget {
       String valueUnit = '',
       double? high,
       double? low,
+      double? textScaleFactor = 1.5,
   }) : 
     _stream = stream,
     _fractionDigits = fractionDigits,
     _valueUnit = valueUnit,
     _high = high,
     _low = low,
+    _textScaleFactor = textScaleFactor,
     super(key: key);
   ///
   @override
@@ -37,6 +40,7 @@ class TextIndicator extends StatefulWidget {
       valueUnit: _valueUnit,
       high: _high,
       low: _low,
+      textScaleFactor: _textScaleFactor,
   );
 }
 
@@ -48,6 +52,7 @@ class _TextIndicatorState extends State<TextIndicator> {
   final String _valueUnit;
   final double? _low;
   final double? _high;
+  final double? _textScaleFactor;
   late TextStyle _textStyle;
   late TextStyle _unitTextStyle;
   late StateColors _stateColors;
@@ -57,14 +62,16 @@ class _TextIndicatorState extends State<TextIndicator> {
     required Stream<DsDataPoint<num>>? stream,
     required int fractionDigits,
     required String valueUnit,
-    double? high,
-    double? low,
+    required double? high,
+    required double? low,
+    required double? textScaleFactor,
   }) :
     _stream = stream,
     _fractionDigits = fractionDigits,
     _valueUnit = valueUnit,
     _high = high,
     _low = low,
+    _textScaleFactor = textScaleFactor,
     super();
   ///
   @override
@@ -116,7 +123,7 @@ class _TextIndicatorState extends State<TextIndicator> {
         Text(
           value.toStringAsFixed(_fractionDigits),
           style: _textStyle.apply(color: color),
-          textScaleFactor: 1.5,
+          textScaleFactor: _textScaleFactor,
         ),
         ..._buildUnitText(_valueUnit, color),
       ],
@@ -129,7 +136,7 @@ class _TextIndicatorState extends State<TextIndicator> {
         Text(
           _valueUnit,
           style: _unitTextStyle.apply(color: color),
-          textScaleFactor: 1.5,
+          textScaleFactor: _textScaleFactor,
         ),
       ];
     }

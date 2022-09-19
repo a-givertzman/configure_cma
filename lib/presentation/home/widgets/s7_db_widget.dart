@@ -4,20 +4,22 @@ import 'package:configure_cma/domain/core/entities/s7_db.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/result/result.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_point_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class S7DbWidget extends StatefulWidget {
+  final DsClient? dsClient;
   final List<S7Db> _dbs;
   final List<bool> _resetNewPoints;
   ///
   S7DbWidget({
     Key? key,
+    this.dsClient,
     required List<S7Db> dbs,
     List<bool>? resetNewPoints,
   }) : 
@@ -137,9 +139,10 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               ],
             ),
             S7PointWidget(
-              flex: {'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15},
+              flex: {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15},
               points: db.points,
               newPoints: _newPoints,
+              dsClient: widget.dsClient,
             ),
           ],
         );
@@ -157,7 +160,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
           return Result(
             data: ParseConfigDb(
               lines: lines,
-              offset: ParseOffset(0),
+              offset: ParseOffset(),
             ).parse().map<String, S7Point>((key, value) {
               return MapEntry<String, S7Point>(
                 key, 

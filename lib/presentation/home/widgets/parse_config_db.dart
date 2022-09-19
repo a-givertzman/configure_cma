@@ -45,20 +45,24 @@ class ParseConfigDb {
         final tagName = RegExp(r'\b\w+\b').firstMatch(line)?[0];
         final tagType = RegExp(r':\s(\b\w+\b)').firstMatch(line)?[1];
         if (matchStructOpen != null) {
+          _offset.add('$tagType');
           ParseConfigDb(
             path: '$_path$tagName.', 
             offset: _offset,
             lines: _lines,
             result: _result,
           ).parse();
-        } else
-        if (matchStructClose != null) {
+        } else if (matchStructClose != null) {
           _state = ParseState.structClose;
           // log(_debug, '$_path: CLOSE');
         } else {
-          _result['$_path$tagName'] = {'type': tagType, 'offset': _offset.value};
+          _result['$_path$tagName'] = {
+            'type': tagType, 
+            'offset': _offset.value, 
+            'bit': DsDataType.fromString('$tagType') == DsDataType.bool() ? _offset.bit : null,
+          };
           // log(_debug, '$_path | ', {'type': tagType, 'offset': _offset.value});
-          _offset.add(DsDataType.fromString('$tagType').length);
+          _offset.add('$tagType');
         }
       }
       if (_state == ParseState.structClose) {
@@ -82,6 +86,7 @@ class ParseConfigDb {
   }
 }
 
+///
 enum ParseState {
   initial(0),
   structOpen(1),
@@ -90,11 +95,40 @@ enum ParseState {
   final int value;
 }
 
+///
+/// Счетчик адреса для ParseConfigDb
 class ParseOffset {
-  int _v;
-  ParseOffset(int value) : _v = value;
-  add(int value) {
-    _v += value;
+  int _value;
+  int _bit;
+  bool _isBool = false;
+  ///
+  ParseOffset({
+    int value = 0, 
+    int bit = 0,
+  }) : 
+    _value = value,
+    _bit = bit;
+  ///
+  add(String tagTypeName) {
+    final tagType = DsDataType.fromString('$tagTypeName');
+    final offset = tagType.length;
+    if (_isBool && tagType == DsDataType.bool()) {
+      _bit++;
+    } else {
+      if (tagType == DsDataType.bool()) {
+        _bit++;
+        _isBool = true;
+      } else {
+        if (_isBool) {
+          _bit = 0;
+          _isBool = false;
+          _value += DsDataType.bool().length;
+        }
+        _value += offset;
+      }
+    }
   }
-  int get value => _v;
+  ///
+  int get value => _value;
+  int get bit => _bit;
 }

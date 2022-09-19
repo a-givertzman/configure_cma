@@ -5,6 +5,7 @@ import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/domain/crane/crane_mode_state.dart';
 import 'package:configure_cma/infrastructure/datasource/data_source.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
+import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
 import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
@@ -12,6 +13,7 @@ import 'package:configure_cma/presentation/core/widgets/right_icon_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/home_body.dart';
 import 'package:configure_cma/presentation/nav/app_nav.dart';
 import 'package:configure_cma/settings/common_settings.dart';
+import 'package:configure_cma/settings/communication_settings.dart';
 import 'package:flutter/material.dart';
 
 
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   static const _debug = true;
   final AppUserStacked _users;
   final AppThemeSwitch _themeSwitch;
+  late DsClient _dsClient;
   // late List<String> _statusList;
   // late ViewFilter _viewFilter;
   ///
@@ -57,6 +60,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _dsClient = DsClientReal(
+      ip: AppCommunicationSettings.dsClientIp, 
+      port: AppCommunicationSettings.dsClientPort,
+      );    
   }
   ///
   @override
@@ -98,6 +105,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: HomeBody(
           users: _users,
+          dsClient: _dsClient,
         ),
       ),
     );

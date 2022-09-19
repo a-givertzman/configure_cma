@@ -5,7 +5,7 @@ class RowWidget extends StatelessWidget {
   final Color? color;
   final Color borderColor;
   final List values;
-  final List<int> flex;
+  final List<int?> flex;
   final List<String?>? tooltips;
   const RowWidget({
     super.key,
@@ -24,8 +24,8 @@ class RowWidget extends StatelessWidget {
       children: values.map((value) {
         index++;
         return CellWidget(
-          flex: flex[index],
-          tooltip: tooltips?[index],
+          flex: flex[index] ?? 1,
+          tooltip: tooltips != null ? ((index < tooltips!.length) ? tooltips![index] : null) : null,
           color: color,
           borderColor: borderColor,
           data: value,
