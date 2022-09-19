@@ -119,7 +119,6 @@ class ParseOffset {
       _bit++;
     } else {
       if (tagType == DsDataType.bool()) {
-        _bit++;
         _isBool = true;
       } else {
         if (_isBool) {
