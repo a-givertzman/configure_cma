@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build linux release
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: |
+          echo "::add-path::$GITHUB_WORKSPACE/flutter/bin"
+        
+      - name: Install dependencies
+        run: flutter pub get
+
+      # - name: Analyze project
+      #   run: flutter analyze
+
+      - name: Configure Windows desctop
+        run: flutter config --enable-windows-desktop
+
+      - name: Build Windows
+        run: flutter build windows
+
+      - name: Zip artifact for deployment
+        run: zip ./build/windows/x64/release/bundle/release.zip ./build/windows/x64/release/bundle/* -r
+
+      - name: Publish release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./build/windows/x64/release/bundle/release.zip"
+          tag: internal_v0.0.${{ github.run_number }}
+          token: ${{ secrets.RELEASES_TOKEN }}
+
+      - name: Show downloads
+        uses: actions/upload-artifact@v3
+        id: download
+        with:
+          name: build-for-windows
+          path: "./build/windows/x64/release/bundle"
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: "./build/windows/x64/release/bundle"

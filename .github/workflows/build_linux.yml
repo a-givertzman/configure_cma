@@ -25,7 +25,7 @@ jobs:
       # - name: Analyze project
       #   run: flutter analyze
 
-      - name: Configure linux desctop
+      - name: Configure Linux desctop
         run: flutter config --enable-linux-desktop
 
       - name: Build linux
