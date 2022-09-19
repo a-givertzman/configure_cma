@@ -29,12 +29,12 @@ jobs:
         run: flutter build windows
 
       - name: Zip artifact for deployment
-        run: zip ./build/windows/x64/release/bundle/release.zip ./build/windows/x64/release/bundle/* -r
+        run: zip build/windows/runner/Release/release.zip build/windows/runner/Release/* -r
 
       - name: Publish release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./build/windows/x64/release/bundle/release.zip"
+          artifacts: "build/windows/runner/Release/release.zip"
           tag: internal_v0.0.${{ github.run_number }}
           token: ${{ secrets.RELEASES_TOKEN }}
 
@@ -43,8 +43,8 @@ jobs:
         id: download
         with:
           name: build-for-windows
-          path: "./build/windows/x64/release/bundle"
+          path: "build/windows/runner/Release"
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: "./build/windows/x64/release/bundle"
+        working-directory: "build/windows/runner/Release"
