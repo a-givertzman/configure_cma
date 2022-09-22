@@ -425,7 +425,7 @@ void main() {
     test('create', () async {
       final parse = ParseConfigDb(
         lines: source.split('\n'),
-        offset: ParseOffset(0),
+        offset: ParseOffset(),
       ).parse();
       // log(_debug, 'parse: ', parse);
       bool _test(Map<String, dynamic> map1, Map<String, dynamic> map2) {

@@ -1,10 +1,5 @@
-import 'dart:io';
-
-import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
-import 'package:configure_cma/domain/event/event_list_data.dart';
-import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
 import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
@@ -65,22 +60,16 @@ class _MenuPageState extends State<MenuPage> {
     final height = MediaQuery.of(context).size.height;
     final dw = (width - AppUiSettings.displaySize.width) / 2;
     final dh = (height - AppUiSettings.displaySize.height) / 2;
-    // TODO fix for release
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      return _buildScaffold(context);
-    } else {
-      // TODO Remove Container & SafeArea on release
-      return Container(
-        color: Theme.of(context).backgroundColor.withOpacity(0.7),
-        child: SafeArea(
-          minimum: EdgeInsets.symmetric(
-            horizontal: dw,
-            vertical: dh,
-          ),
-          child: _buildScaffold(context),
+    return Container(
+      color: Theme.of(context).backgroundColor.withOpacity(0.7),
+      child: SafeArea(
+        minimum: EdgeInsets.symmetric(
+          horizontal: dw,
+          vertical: dh,
         ),
-      );
-    } 
+        child: _buildScaffold(context),
+      ),
+    );
   }
   ///
   Widget _buildScaffold(BuildContext context) {

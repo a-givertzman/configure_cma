@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
-import 'package:configure_cma/domain/crane/crane_mode_state.dart';
 import 'package:configure_cma/infrastructure/datasource/data_source.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
@@ -11,7 +10,6 @@ import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
 import 'package:configure_cma/presentation/core/widgets/button/circular_fab_widget.dart';
 import 'package:configure_cma/presentation/core/widgets/right_icon_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/home_body.dart';
-import 'package:configure_cma/presentation/nav/app_nav.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:configure_cma/settings/communication_settings.dart';
 import 'package:flutter/material.dart';
@@ -71,26 +69,7 @@ class _HomePageState extends State<HomePage> {
     final user = _users.peek;
     log(_debug, '[_HomePageState.build] user: ', user);
     // final userGroup = AppUserGroup('${user['group']}');
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    final dw = (width - AppUiSettings.displaySize.width) / 2;
-    final dh = (height - AppUiSettings.displaySize.height) / 2;
-    // TODO fix for release
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      return _buildScaffold(context);
-    } else {
-      // TODO Remove Container & SafeArea on release
-      return Container(
-        color: Theme.of(context).backgroundColor.withOpacity(0.7),
-        child: SafeArea(
-          minimum: EdgeInsets.symmetric(
-            horizontal: dw,
-            vertical: dh,
-          ),
-          child: _buildScaffold(context),
-        ),
-      );
-    } 
+    return _buildScaffold(context);
   }
   ///
   Widget _buildScaffold(BuildContext context) {
@@ -122,13 +101,13 @@ class _HomePageState extends State<HomePage> {
           // onPressed: () {
           // },
           children: [
-            FloatingActionButton(
-              heroTag: 'FloatingActionButtonHome', 
-              child: Icon(Icons.home, size: floatingActionIconSize,),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
+            // FloatingActionButton(
+            //   heroTag: 'FloatingActionButtonHome', 
+            //   child: Icon(Icons.home, size: floatingActionIconSize,),
+            //   onPressed: () {
+            //     Navigator.of(context).pop(false);
+            //   },
+            // ),
             FloatingActionButton(
               heroTag: 'FloatingActionButtonTheme', 
               child: Icon(Icons.color_lens_outlined, size: floatingActionIconSize,),
@@ -147,10 +126,11 @@ class _HomePageState extends State<HomePage> {
             // ),
             FloatingActionButton(
               heroTag: 'FloatingActionButtonHomeLogout', 
-              child: Icon(Icons.logout, size: floatingActionIconSize,),
+              child: Icon(Icons.close, size: floatingActionIconSize,),
               onPressed: () {
-                 _users.clear();
-                AppNav.logout(context);
+                exit(0);
+                //  _users.clear();
+                // AppNav.logout(context);
               },
             ),
           ],

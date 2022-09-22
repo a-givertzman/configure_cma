@@ -1,6 +1,5 @@
 
 import 'package:configure_cma/domain/core/entities/s7_db.dart';
-import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
@@ -27,7 +26,6 @@ class S7DbWidget extends StatefulWidget {
 //
 class _S7DbWidgetState extends State<S7DbWidget> {
   // static const _debug = true;
-  bool _isReading = false;
   ///
   @override
   Widget build(BuildContext context) {
@@ -45,46 +43,47 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CellWidget(
-                  flex: 5,
+                  flex: 10,
                   color: color,
                   borderColor: borderColor,
                   data: db.name,
+                  tooltip: 'Точное имя DB-блока как в контроллере, может содержать цифры, латинские буквы и подчерк',
                 ),
                 CellWidget(
-                  flex: 5,
+                  flex: 15,
                   color: color,
                   borderColor: borderColor,
                   data: db.description,
-                ),
-                CellWidget(
-                  flex: 5,
-                  color: color,
-                  borderColor: borderColor,
-                  data: db.description,
+                  tooltip: 'Пользовательское наименование',
                 ),
                 CellWidget(
                   flex: 5,
                   color: color,
                   borderColor: borderColor,
                   data: db.number,
+                  tooltip: 'Номер DB-блока, из конфигурации контроллера',
                 ),
                 CellWidget(
                   flex: 5,
                   color: color,
                   borderColor: borderColor,
                   data: db.offset,
+                  tooltip: 'Начало адресного пространства DB-блока, offset первого тега',
                 ),
                 CellWidget(
                   flex: 5,
-                  color: color,
+                  color: db.sizeIsUpdated ? Colors.yellow.withAlpha(200) : color,
                   borderColor: borderColor,
                   data: db.size,
+                  readOnly: true,
+                  tooltip: 'Длина адресного пространства DB-блока, offset + size последнего тега',
                 ),
                 CellWidget(
                   flex: 5,
                   color: color,
                   borderColor: borderColor,
                   data: db.delay,
+                  tooltip: 'Период опроса DB-блока, мс',
                 ),
                 FittedBox(
                   child: SelectFileWidget(
@@ -116,6 +115,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
                 IconButton(
                   onPressed: () async {
                     db.points.removeWhere((key, point) => point.isSelected);
+                    db.updateDbSize;
                     setState(() {});
                   }, 
                   icon: Tooltip(

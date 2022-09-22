@@ -1,13 +1,12 @@
 import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
-import 'package:configure_cma/domain/core/log/log.dart';
 
 const structOpenRegexPattern = r'\bSTRUCT\b|\b.+:.+\bStruct\b';
 const structCloseRegexPattern = r'\bEND_STRUCT\b';
 
 ///
 class ParseConfigDb {
-  static const _debug = true;
+  // static const _debug = true;
   final List<String> _lines;
   final String _path;
   ParseOffset _offset;

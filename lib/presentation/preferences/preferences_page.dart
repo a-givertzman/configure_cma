@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/infrastructure/datasource/data_source.dart';
@@ -74,22 +72,16 @@ class _PreferencesPageState extends State<PreferencesPage> {
     final height = MediaQuery.of(context).size.height;
     final dw = (width - AppUiSettings.displaySize.width) / 2;
     final dh = (height - AppUiSettings.displaySize.height) / 2;
-    // TODO fix for release
-    if (Platform.isLinux || Platform.isMacOS) {
-      return _buildScaffold(context);
-    } else {
-      // TODO Remove Container & SafeArea on release
-      return Container(
-        color: Theme.of(context).backgroundColor.withOpacity(0.7),
-        child: SafeArea(
-          minimum: EdgeInsets.symmetric(
-            horizontal: dw,
-            vertical: dh,
-          ),
-          child: _buildScaffold(context),
+    return Container(
+      color: Theme.of(context).backgroundColor.withOpacity(0.7),
+      child: SafeArea(
+        minimum: EdgeInsets.symmetric(
+          horizontal: dw,
+          vertical: dh,
         ),
-      );
-    } 
+        child: _buildScaffold(context),
+      ),
+    );
   }
   ///
   Widget _buildScaffold(BuildContext context) {

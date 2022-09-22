@@ -15,11 +15,11 @@ void main() {
       await windowManager.ensureInitialized();
       windowManager.waitUntilReadyToShow(
         WindowOptions(
-          size: Size(1280, 800),
-          center: true,
+          // size: Size(1280, 800),
+          // center: true,
           backgroundColor: Colors.transparent,
-          skipTaskbar: false,
-          titleBarStyle: TitleBarStyle.hidden,
+          // skipTaskbar: false,
+          // titleBarStyle: TitleBarStyle.hidden,
         ),
       )
       .then((value) async {

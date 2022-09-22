@@ -6,12 +6,8 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:configure_cma/app_widget.dart';
-import 'package:configure_cma/domain/alarm/alarm_list_point.dart';
-import 'package:configure_cma/infrastructure/alarm/alarm_list_data_source.dart';
 // import 'package:configure_cma/domain/translate/app_text.dart';
-import 'package:configure_cma/infrastructure/stream/ds_client_real.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
-import 'package:configure_cma/settings/communication_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -19,11 +15,11 @@ void main() {
     'SignInPage', 
     (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    final _dsClient = DsClientReal(
-      // ip = '192.168.0.100';
-      ip: AppCommunicationSettings.dsClientIp, 
-      port: AppCommunicationSettings.dsClientPort,
-    );
+    // final _dsClient = DsClientReal(
+    //   // ip = '192.168.0.100';
+    //   ip: AppCommunicationSettings.dsClientIp, 
+    //   port: AppCommunicationSettings.dsClientPort,
+    // );
     final _appThemeSwitch = AppThemeSwitch();
     await tester.pumpWidget(
       AppWidget(

@@ -35,7 +35,7 @@ class CellWidget<T> extends StatefulWidget {
 
 ///
 class _CellWidgetState<T> extends State<CellWidget<T>> {
-  static const _debug = true;
+  // static const _debug = true;
   final TextEditingController _editingController = TextEditingController();
   ///
   @override

@@ -1,6 +1,5 @@
 import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
-import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/core/widgets/text_indicator.dart';
@@ -37,7 +36,7 @@ class PointRowWidget extends StatefulWidget {
 
 ///
 class _PointRowWidgetState extends State<PointRowWidget> {
-  static const _debug = true;
+  // static const _debug = true;
   ///
   @override
   Widget build(BuildContext context) {
@@ -79,7 +78,6 @@ class _PointRowWidgetState extends State<PointRowWidget> {
             color: color,
             borderColor: widget.borderColor,
             data: widget._point.v != null ? widget._point.v! > 0 ? '●' : '' : '',
-            // newData: newPoint?.v,
             onChanged: (value) => widget._point.setV(value.isEmpty ? '' : '1'),
             tooltip: widget.newPoint != null ? (widget.newPoint!.v != widget._point.v ? '${widget.newPoint!.v}' : '') : '',
           ),

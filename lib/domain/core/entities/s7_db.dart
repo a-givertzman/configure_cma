@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:configure_cma/domain/core/entities/ds_data_type.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
 import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
@@ -18,6 +19,9 @@ class S7Db {
   late Map<String, S7PointMarked> _points;
   late Map<String, S7Point>? _newPoints = null;
   bool _isReading = false;
+  late int? _sizeOld;
+  bool _sizeIsUpdated = false;
+
   ///
   S7Db({
     required String name, 
@@ -48,6 +52,7 @@ class S7Db {
         S7PointMarked(S7Point.fromMap(key, value as Map)),
       );
     });
+    updateDbSize();
   }
   ///
   S7Db.fromList(String name, List<String> list) : _name = name {
@@ -64,6 +69,7 @@ class S7Db {
     //     S7Point.fromMap(key, value as Map),
     //   );
     // });
+    updateDbSize();
   }
   String get name => _name;
   String? get description => _description;
@@ -73,9 +79,12 @@ class S7Db {
   int get delay => _delay;
   Map<String, S7PointMarked> get points => _points;
   Map<String, S7Point>? get newPoints => _newPoints;
+  int? get sizeOld => _sizeOld;
+  bool get sizeIsUpdated => _sizeIsUpdated;
   ///
   void clearNewPoints() {
     _newPoints = null;
+    updateDbSize();
   }
   ///
   bool _isDeleted(String? key, Map<String, S7Point>? newPoints) {
@@ -94,6 +103,8 @@ class S7Db {
     return ! points.keys.contains(key);
   }
   ///
+  /// Сравнивает тэги конфигурации сервера с тэгами импортированными из DB-блока контроллера
+  /// проставляет атрибутф new, deleted и отмечает все изменившиеся значения каждого тэга
   void comparePoints() {
     final newPoints = _newPoints;
     if (newPoints != null) {
@@ -133,6 +144,7 @@ class S7Db {
             );
           });
           comparePoints();
+          updateDbSize();
           return Result(data: true);
         });
       } else {
@@ -149,6 +161,7 @@ class S7Db {
     }
   }
   ///
+  /// Добавляет новый тэг в блок
   void newPoint() {
     final point =  S7PointMarked(
       S7Point(
@@ -160,5 +173,22 @@ class S7Db {
     _points.addAll({
       "new": point,
     });
+  }
+  ///
+  /// Обновляет размер DB-блока
+  /// Вызвать данный метод при изменении количества тэгов или адресации
+  void updateDbSize() {
+    final lastPoint = _points.values.reduce((lastPoint, point) {
+      if (point.offset > lastPoint.offset) {
+        return point;
+      }
+      return lastPoint;
+    },);
+    final newSize = lastPoint.offset + DsDataType.fromString(lastPoint.type).length;
+    if (_size != newSize) {
+      _sizeIsUpdated = true;
+      _sizeOld = _size;
+      _size = newSize;
+    }
   }
 }

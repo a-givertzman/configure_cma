@@ -6,7 +6,6 @@ import 'package:configure_cma/domain/core/entities/network_operation_state.dart'
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
-import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/s7_line_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_dir_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
@@ -37,6 +36,7 @@ class _HomeBodyState extends State<HomeBody> {
   final _state = NetworkOperationState();
   final ScrollController _scrollController = ScrollController();
   String? _dataServerConfigPath;
+  String? _cmaAppPath;
   Map<String, S7Line> _lines = {};
   /// 
   /// Builds home body widget
@@ -47,7 +47,6 @@ class _HomeBodyState extends State<HomeBody> {
     const blockPadding = AppUiSettings.blockPadding;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final stateColors = Theme.of(context).stateColors;
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: width,
@@ -77,12 +76,60 @@ class _HomeBodyState extends State<HomeBody> {
                     child: SelectDirWidget(
                       labelText: 'Path to flutter application',
                       onComplete: (value) {
-                        
+                        _cmaAppPath = value;
                       },
                       icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
-                  IconButton(onPressed: null, icon: Icon(null)),
+                  IconButton(
+                    onPressed: () async {
+                      log(_debug, '[$_HomeBodyState.build] SAVING to flutter app');
+                      if (_state.isSaving || _state.isLoading) {
+                        return;
+                      }
+                      final cmaAppPath = _cmaAppPath;
+                      if (cmaAppPath != null) {
+                        setState(() {
+                          _state.setSaving();
+                        });
+                        final dir = join(dirname(cmaAppPath), 'assets/alarm/');
+                        final alarmListName = 'alarm-list.json';
+                        final backupFile = File(cmaAppPath);
+                        final t = DateTime.now();
+                        final timeTag = '${t.year}.${t.month}.${t.day}_${t.hour}.${t.minute}.${t.second}_';
+                        backupFile.rename(join(dir, '$timeTag$alarmListName'));
+                        final file = File(join(dir, alarmListName));
+                        if (!file.existsSync()) {
+                          await file.create(recursive: true);
+                        }
+                        final encoder = new JsonEncoder.withIndent("    ");
+                        final alarmList = {};
+                        _lines.forEach((key, line) {
+                          line.ieds.forEach((key, ied) {
+                            ied.dbs.forEach((key, db) {
+                              db.points.forEach((key, point) {
+                                final alarm = point.a;
+                                if (alarm != null && alarm > 0) {
+                                  alarmList.addAll({
+                                    point.name: {'class': point.a},
+                                  });
+                                }
+                              });
+                            });
+                          },);
+                        });
+                        final json = encoder.convert(alarmList);
+                        await file.writeAsString(json);
+                        setState(() {
+                          _state.setSaved();
+                        });
+                      }
+                    }, 
+                    icon: Tooltip(
+                      child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
+                      message: 'Save config',
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -165,7 +212,7 @@ class _HomeBodyState extends State<HomeBody> {
                     child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
                     message: 'Save config',
                   ),
-                ),                  
+                ),
               ],
             ),
           ),
