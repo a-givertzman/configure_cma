@@ -107,6 +107,7 @@ class _HomeBodyState extends State<HomeBody> {
                         _lines.forEach((key, line) {
                           line.ieds.forEach((key, ied) {
                             ied.dbs.forEach((key, db) {
+                              db.updateDbSize();
                               db.points.forEach((key, point) {
                                 final alarm = point.a;
                                 if (alarm != null && alarm > 0) {
