@@ -1,16 +1,13 @@
 # configure_cma
 
-A new Flutter project.
+A fromtend application for configing and monitoring [DataServer][1] instance.
+Written in Flutter.
 
-## Getting Started
+## Futures
+ - Viewing and editing the [DataServer][1] configuration parameters in the table represantation;
+ - Updating the DB section by importing of the S7 data block configuration in the DB format;
+ - Sawing hole edited/updated configuration to the [DataServer][1] parse.json file;
+ - Live monitoring of the configured data points values
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[1]: https://github.com/a-givertzman/s7-data-server
