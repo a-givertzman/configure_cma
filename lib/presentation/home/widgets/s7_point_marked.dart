@@ -23,6 +23,7 @@ class S7PointMarked extends S7Point {
       threshold: point.threshold, 
       h: point.h, 
       a: point.a, 
+      fr: point.fr,
       comment: point.comment,
     );
   bool get isNew => _isNew;

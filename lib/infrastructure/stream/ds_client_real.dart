@@ -72,15 +72,15 @@ class DsClientReal implements DsClient{
         onListen: () {
           if (!_isActive) {
             _isActive = true;
-            log(_debug, '[$DsClientReal._setupStreamController] before _run');
+            // log(_debug, '[$DsClientReal._setupStreamController] before _run');
             _run();
-            log(_debug, '[$DsClientReal._setupStreamController] after _run');
+            // log(_debug, '[$DsClientReal._setupStreamController] after _run');
           }
         },
       );
       streamController.onCancel = () => _onCancel(streamController);
       _receivers[name] = streamController;
-      log(_debug, '[$DsClientReal._setupStreamController] value: $name,   streamCtrl: $streamController');
+      // log(_debug, '[$DsClientReal._setupStreamController] value: $name,   streamCtrl: $streamController');
       return streamController;
     } else {
       if (_receivers.containsKey(name)) {

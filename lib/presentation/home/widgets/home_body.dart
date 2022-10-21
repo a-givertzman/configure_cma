@@ -280,12 +280,19 @@ class _HomeBodyState extends State<HomeBody> {
       return file.readAsString().then((value) {
         // log(_debug, value);
         Map<String, dynamic> config = json.decode(value);
-        return config.map((key, line) {
-          return MapEntry(
-            key, 
-            S7Line(key, line),
-          );
-        });
+        if (config.containsKey('data_source')) {
+          final Map<String, dynamic> dataSource = config['data_source'];
+          if (dataSource.containsKey('lines')) {
+            final Map<String, dynamic> lines = dataSource['lines'];
+            return lines.map((key, line) {
+              return MapEntry(
+                key, 
+                S7Line(key, line),
+              );
+            });
+          }
+        }
+        return {};
       });
     }
     return Future.value({});

@@ -1,5 +1,6 @@
 import 'package:configure_cma/domain/core/entities/ds_data_point.dart';
 import 'package:configure_cma/domain/core/entities/s7_point.dart';
+import 'package:configure_cma/domain/core/entities/s7_point_fr.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/core/widgets/text_indicator.dart';
@@ -136,6 +137,14 @@ class _PointRowWidgetState extends State<PointRowWidget> {
             data: widget._point.a,
             onChanged: (value) => widget._point.setA(value),
             tooltip: widget._point.aIsUpdated ? 'before: ${widget._point.aOld}' : null,
+          ),
+          CellWidget<S7PointFr?>(
+            flex: flex != null ? flex['fr'] ?? 1 : 1,
+            color: widget._point.frIsUpdated ? isUpdatedColor : color,
+            borderColor: widget.borderColor,
+            data: widget._point.fr,
+            // onChanged: (value) => widget._point.setFr(value),
+            tooltip: widget._point.frIsUpdated ? 'before: ${widget._point.frOld}' : null,
           ),
           CellWidget<String>(
             flex: flex != null ? flex['comment'] ?? 1 : 1,

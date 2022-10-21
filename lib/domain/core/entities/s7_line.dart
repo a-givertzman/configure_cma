@@ -47,6 +47,7 @@ class S7Line {
                       if (point.threshold != null) "threshHold": point.threshold,
                       if (point.h != null) "h": point.h,
                       if (point.a != null) "a": point.a,
+                      if (point.fr != null) "fr": point.fr,
                       if (point.v != null) "v": point.v,
                       if (point.comment != null) "comment": point.comment,
                     }

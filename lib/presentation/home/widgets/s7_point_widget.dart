@@ -44,7 +44,7 @@ class _S7PointWidgetState extends State<S7PointWidget> {
       return a.offset.compareTo(b.offset);
     });
     Color? color = null;
-    final flex = widget._flex ?? {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'comment': 15};
+    final flex = widget._flex ?? {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'fr': 3, 'comment': 15};
     const borderColor = Colors.white10;
     log(_debug, '[$_S7PointWidgetState.build] _points: ');
     return Column(
@@ -52,8 +52,8 @@ class _S7PointWidgetState extends State<S7PointWidget> {
         RowWidget(
           color: color,
           borderColor: borderColor,
-          values: ['value', 'v', 'name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'comment'],
-          flex: [flex['value']!, flex['v']!, flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['comment']!],
+          values: ['value', 'v', 'name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'fr', 'comment'],
+          flex: [flex['value']!, flex['v']!, flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['fr']!, flex['comment']!],
           tooltips: [
             'Текуще значение тега в контроллере',
             'Виртуальный сигнал, в контроллере отсутствует, используется в DataServer для диагностики и математики',
@@ -64,6 +64,7 @@ class _S7PointWidgetState extends State<S7PointWidget> {
             'Threshold - Порог нечувствительности тэга',
             'Атрибут записи в историю, активируется если 1, отключается если не указан',
             'Класс аварии, активируется если от 1 до 15, отключается если не указан',
+            'Регистратор аварий \n{"act": [1]} - для запуска по конкретному значению, \n{"nom": 50} - для запуска по изменению с мертвой зоной обратно-пропорциональной проценту от номинала',
             'Комментарий, может читаться из конфигурации контроллера, если указан',
           ],
         ),
@@ -76,7 +77,7 @@ class _S7PointWidgetState extends State<S7PointWidget> {
               final key = pointMarked.name;
               final newPoint = widget._newPoints?[key];
               // color = null;
-              log(_debug, pointMarked);
+              log(_debug, '[$_S7PointWidgetState.build] point: ', pointMarked);
               return PointRowWidget(
                 color: null,
                 borderColor: borderColor,
