@@ -126,7 +126,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               ],
             ),
             S7PointWidget(
-              flex: {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'fr': 3, 'comment': 15},
+              flex: {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'fr': 7, 'comment': 15},
               points: db.points,
               newPoints: db.newPoints,
               dsClient: widget.dsClient,

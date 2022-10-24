@@ -44,7 +44,7 @@ class _S7PointWidgetState extends State<S7PointWidget> {
       return a.offset.compareTo(b.offset);
     });
     Color? color = null;
-    final flex = widget._flex ?? {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'fr': 3, 'comment': 15};
+    final flex = widget._flex ?? {'value': 3, 'v': 2, 'name': 20, 'type': 5, 'offset': 3, 'bit': 3, 'threshold': 3, 'h': 3, 'a': 3, 'fr': 7, 'comment': 15};
     const borderColor = Colors.white10;
     log(_debug, '[$_S7PointWidgetState.build] _points: ');
     return Column(

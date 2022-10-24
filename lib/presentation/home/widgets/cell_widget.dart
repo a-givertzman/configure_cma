@@ -59,7 +59,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
         child: Tooltip(
           message: widget._tooltip,
           child: RepaintBoundary(
-            child: TextFormField(
+            child: TextField(
               readOnly: widget._readOnly,
               controller: _editingController,
               decoration: InputDecoration(

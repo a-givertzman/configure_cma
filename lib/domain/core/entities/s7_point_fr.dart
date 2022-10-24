@@ -3,21 +3,55 @@ import 'package:configure_cma/domain/core/log/log.dart';
 class S7PointFr {
   static const _debug = true;
   late List<int>? _act = null;
-  late String? _nom = null;
+  late int? _nomConst = null;
+  late String? _nomTag = null;
   ///
   S7PointFr({
     List<int>? act,
-    String? nom,
+    int? nomConst,
+    String? nomTag,
   }) : 
     _act = act,
-    _nom = nom;
+    _nomConst = nomConst,
+    _nomTag = nomTag;
   ///
   S7PointFr.fromMap(Map? config) {
     if (config != null) {
       log(_debug, '[$S7PointFr.fromMap] fr config: ', config);
       _act = (config['act'] as List<dynamic>?)?.map((e) => int.parse('$e')).toList();
-      _nom = '${config['nom']}';
+      final nom = config['nom'];
+      if (nom != null) {
+        log(_debug, '[$S7PointFr.fromMap] fr nom: ', nom);
+        if (nom is int) {
+          log(_debug, '[$S7PointFr.fromMap] fr nom is int: ', nom);
+          _nomConst = nom;
+        } else if (nom is String) {
+          log(_debug, '[$S7PointFr.fromMap] fr nom: is String ', nom);
+          _nomTag = nom;
+        } else {
+          log(_debug, '[$S7PointFr.fromMap] Uncnown type of nom: ', nom);
+        }
+      }
     }
+  }
+  ///
+  bool get isEmpty {
+    return _act == null && _nomConst == null && (_nomTag == null || (_nomTag != null && _nomTag!.isEmpty));
+  }
+  ///
+  bool get isNotEmpty => !isEmpty;
+  ///
+  Map<String, dynamic> toJson() {
+    log(_debug, '[$S7PointFr.toJson] _act: ', _act);
+    log(_debug, '[$S7PointFr.toJson] _nomConst: ', _nomConst);
+    log(_debug, '[$S7PointFr.toJson] _nomTag: ', _nomTag);
+    final result = {
+      if (_act != null) 'act': _act,
+      if (_nomConst != null) 'nom': _nomConst,
+      if (_nomTag != null && _nomTag!.isNotEmpty) 'nom': _nomTag,
+    };
+    log(_debug, '[$S7PointFr.toJson] fr: ', result);
+    return result;
   }
   ///
   @override
@@ -25,10 +59,12 @@ class S7PointFr {
     other is S7PointFr 
     // && other.runtimeType == runtimeType
     && other.act == _act
-    && other.nom == _nom;
+    && other._nomConst == _nomConst
+    && other.nomTag == _nomTag;
   ///
   List<int>? get act => _act;
-  String? get nom => _nom;
+  int? get nomConst => _nomConst;
+  String? get nomTag => _nomTag;
   ///
   // void update(S7PointFr? newPoint) {
   //   if (newPoint != null) {
@@ -79,16 +115,22 @@ class S7PointFr {
     _act = value.split(',').map((vStr) => int.parse(vStr)).toList();
   }
   ///
-  void setNom(String value) {
-    _nom = value;
+  void setNomConst(int value) {
+    _nomConst = value;
+  }
+  ///
+  void setNomTag(String value) {
+    _nomTag = value;
   }
   ///
   @override
   String toString() {
     if (_act != null) {
       return 'act: $_act';
-    } else if (_nom != null) {
-      return 'nom: $_nom';
+    } else if (_nomConst != null) {
+      return 'nom: $_nomConst';
+    } else if (_nomTag != null) {
+      return 'nom: $_nomTag';
     }
     return '';
   }

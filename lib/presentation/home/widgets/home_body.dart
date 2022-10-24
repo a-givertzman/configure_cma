@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
+import 'package:configure_cma/domain/core/entities/ds_config.dart';
 import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
@@ -11,7 +12,6 @@ import 'package:configure_cma/presentation/home/widgets/select_dir_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/select_file_widget.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class HomeBody extends StatefulWidget {
   final AppUserStacked _users;
@@ -35,7 +35,7 @@ class _HomeBodyState extends State<HomeBody> {
   static const _debug = true;
   final _state = NetworkOperationState();
   final ScrollController _scrollController = ScrollController();
-  String? _dataServerConfigPath;
+  final DSConfig _dsConfig = DSConfig();
   String? _cmaAppPath;
   Map<String, S7Line> _lines = {};
   /// 
@@ -87,44 +87,14 @@ class _HomeBodyState extends State<HomeBody> {
                       if (_state.isSaving || _state.isLoading) {
                         return;
                       }
-                      final cmaAppPath = _cmaAppPath;
-                      if (cmaAppPath != null) {
-                        setState(() {
-                          _state.setSaving();
-                        });
-                        final dir = join(dirname(cmaAppPath), 'assets/alarm/');
-                        final alarmListName = 'alarm-list.json';
-                        final backupFile = File(cmaAppPath);
-                        final t = DateTime.now();
-                        final timeTag = '${t.year}.${t.month}.${t.day}_${t.hour}.${t.minute}.${t.second}_';
-                        backupFile.rename(join(dir, '$timeTag$alarmListName'));
-                        final file = File(join(dir, alarmListName));
-                        if (!file.existsSync()) {
-                          await file.create(recursive: true);
-                        }
-                        final encoder = new JsonEncoder.withIndent("    ");
-                        final alarmList = {};
-                        _lines.forEach((key, line) {
-                          line.ieds.forEach((key, ied) {
-                            ied.dbs.forEach((key, db) {
-                              db.updateDbSize();
-                              db.points.forEach((key, point) {
-                                final alarm = point.a;
-                                if (alarm != null && alarm > 0) {
-                                  alarmList.addAll({
-                                    point.name: {'class': point.a},
-                                  });
-                                }
-                              });
-                            });
-                          },);
-                        });
-                        final json = encoder.convert(alarmList);
-                        await file.writeAsString(json);
-                        setState(() {
-                          _state.setSaved();
-                        });
-                      }
+                      setState(() => _state.setSaving());
+                      _dsConfig.writeCmaConfig(
+                        cmaPath: _cmaAppPath,
+                        lines: _lines,
+                        backup: true,
+                      ).whenComplete(() {
+                        setState(() => _state.setSaved());
+                      });
                     }, 
                     icon: Tooltip(
                       child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
@@ -149,7 +119,7 @@ class _HomeBodyState extends State<HomeBody> {
                     editable: true,
                     labelText: 'Path to DataServer config file',
                     allowedExtensions: ['conf', 'cfg', 'json'],
-                    onComplete: (value) {
+                    onComplete: (path) {
                       if (_state.isSaving || _state.isLoading) {
                         return;
                       }
@@ -157,8 +127,7 @@ class _HomeBodyState extends State<HomeBody> {
                         _lines = {};
                         _state.setLoading();
                       });
-                      _dataServerConfigPath = value;
-                      _readConfigFile(value).then((lines) {
+                      _dsConfig.read(path).then((lines) {
                         if (lines.isNotEmpty) {
                           setState(() {
                             _lines = lines;
@@ -178,36 +147,13 @@ class _HomeBodyState extends State<HomeBody> {
                     if (_state.isSaving || _state.isLoading) {
                       return;
                     }
-                    final dataServerConfigPath = _dataServerConfigPath;
-                    if (dataServerConfigPath != null) {
-                      setState(() {
-                        _state.setSaving();
-                      });
-                      final dir = dirname(dataServerConfigPath);
-                      final name = basename(dataServerConfigPath);
-                      // final path = join(dir, 'confNew.json');
-                      final backupFile = File(dataServerConfigPath);
-                      final t = DateTime.now();
-                      final timeTag = '${t.year}.${t.month}.${t.day}_${t.hour}.${t.minute}.${t.second}_';
-                      backupFile.rename(join(dir, '$timeTag$name'));
-                      final file = File(dataServerConfigPath);
-                      if (!file.existsSync()) {
-                        await file.create(recursive: true);
-                      }
-                      final encoder = new JsonEncoder.withIndent("    ");
-                      final json = encoder.convert(
-                        _lines.map((key, line) {
-                          return MapEntry(
-                            key, 
-                            line,
-                          );
-                        })
-                      );
-                      await file.writeAsString(json);
-                      setState(() {
-                        _state.setSaved();
-                      });
-                    }
+                    setState(() => _state.setSaving());
+                    _dsConfig.write(
+                      lines: _lines,
+                      bacup: true,
+                    ).whenComplete(() {
+                      setState(() => _state.setSaved());
+                    });
                   }, 
                   icon: Tooltip(
                     child: Icon(Icons.file_upload, color: Theme.of(context).colorScheme.primary),
@@ -272,30 +218,6 @@ class _HomeBodyState extends State<HomeBody> {
     } else {
       return Center(child: Text('Now data'));
     }    
-  }
-  ///
-  Future<Map<String, S7Line>> _readConfigFile(String? path) {
-    if (path != null) {
-      final file = File(path);
-      return file.readAsString().then((value) {
-        // log(_debug, value);
-        Map<String, dynamic> config = json.decode(value);
-        if (config.containsKey('data_source')) {
-          final Map<String, dynamic> dataSource = config['data_source'];
-          if (dataSource.containsKey('lines')) {
-            final Map<String, dynamic> lines = dataSource['lines'];
-            return lines.map((key, line) {
-              return MapEntry(
-                key, 
-                S7Line(key, line),
-              );
-            });
-          }
-        }
-        return {};
-      });
-    }
-    return Future.value({});
   }
 }
 
