@@ -2,23 +2,29 @@ import 'package:configure_cma/domain/core/log/log.dart';
 
 class S7PointFr {
   static const _debug = true;
-  late List<int>? _act = null;
+  late List<int>? _trip = null;
   late int? _nomConst = null;
-  late String? _nomTag = null;
+  late String? _nomPoint = null;
+  late Map<String, double>? _threshold = null;
+  late double? _integralFactor = null;
   ///
   S7PointFr({
-    List<int>? act,
+    List<int>? trip,
     int? nomConst,
-    String? nomTag,
+    String? nomPoint,
+    Map<String, double>? threshold,
+    double? integralFactor,
   }) : 
-    _act = act,
+    _trip = trip,
     _nomConst = nomConst,
-    _nomTag = nomTag;
+    _nomPoint = nomPoint,
+    _threshold = threshold,
+    _integralFactor = integralFactor;
   ///
   S7PointFr.fromMap(Map? config) {
     if (config != null) {
       log(_debug, '[$S7PointFr.fromMap] fr config: ', config);
-      _act = (config['act'] as List<dynamic>?)?.map((e) => int.parse('$e')).toList();
+      _trip = (config['trip'] as List<dynamic>?)?.map((e) => int.parse('$e')).toList();
       final nom = config['nom'];
       if (nom != null) {
         log(_debug, '[$S7PointFr.fromMap] fr nom: ', nom);
@@ -27,28 +33,33 @@ class S7PointFr {
           _nomConst = nom;
         } else if (nom is String) {
           log(_debug, '[$S7PointFr.fromMap] fr nom: is String ', nom);
-          _nomTag = nom;
+          _nomPoint = nom;
         } else {
           log(_debug, '[$S7PointFr.fromMap] Uncnown type of nom: ', nom);
         }
       }
+      log(_debug, '[$S7PointFr.fromMap] config["threshold"]: ', config['threshold']);
+      _threshold = config['threshold'] != null ? Map<String, double>.from(config['threshold']) : null;
+      _integralFactor = config['integralFactor'];
     }
   }
   ///
   bool get isEmpty {
-    return _act == null && _nomConst == null && (_nomTag == null || (_nomTag != null && _nomTag!.isEmpty));
+    return _trip == null && _nomConst == null && (_nomPoint == null || (_nomPoint != null && _nomPoint!.isEmpty));
   }
   ///
   bool get isNotEmpty => !isEmpty;
   ///
   Map<String, dynamic> toJson() {
-    log(_debug, '[$S7PointFr.toJson] _act: ', _act);
+    log(_debug, '[$S7PointFr.toJson] _trip: ', _trip);
     log(_debug, '[$S7PointFr.toJson] _nomConst: ', _nomConst);
-    log(_debug, '[$S7PointFr.toJson] _nomTag: ', _nomTag);
+    log(_debug, '[$S7PointFr.toJson] _nomTag: ', _nomPoint);
     final result = {
-      if (_act != null) 'act': _act,
+      if (_trip != null) 'trip': _trip,
       if (_nomConst != null) 'nom': _nomConst,
-      if (_nomTag != null && _nomTag!.isNotEmpty) 'nom': _nomTag,
+      if (_nomPoint != null && _nomPoint!.isNotEmpty) 'nom': _nomPoint,
+      if (_threshold != null) 'threshold': _threshold,
+      if (_integralFactor != null) 'integralFactor': _integralFactor,
     };
     log(_debug, '[$S7PointFr.toJson] fr: ', result);
     return result;
@@ -58,79 +69,46 @@ class S7PointFr {
   bool operator ==(Object other) =>
     other is S7PointFr 
     // && other.runtimeType == runtimeType
-    && other.act == _act
+    && other.act == _trip
     && other._nomConst == _nomConst
-    && other.nomTag == _nomTag;
+    && other.nomPoint == _nomPoint
+    && other.threshold == _threshold
+    && other.integralFactor == _integralFactor;
   ///
-  List<int>? get act => _act;
+  List<int>? get act => _trip;
   int? get nomConst => _nomConst;
-  String? get nomTag => _nomTag;
+  String? get nomPoint => _nomPoint;
+  Map<String, double>? get threshold => _threshold;
+  double? get integralFactor => _integralFactor;
   ///
-  // void update(S7PointFr? newPoint) {
-  //   if (newPoint != null) {
-  //     if (_type != newPoint.type) {
-  //       _typeOld = '$_type';
-  //       _type = '${newPoint.type}';
-  //       _typeIsUpdated = true;
-  //     }
-  //     if (_offset != newPoint.offset) {
-  //       _offsetOld = _offset;
-  //       _offset = newPoint.offset;
-  //       _offsetIsUpdated = true;
-  //     }
-  //     if (_bit != newPoint.bit) {
-  //       _bitOld = _bit;
-  //       _bit = newPoint.bit;
-  //       _bitIsUpdated = true;
-  //     }
-      // if (_threshold != newPoint.threshold) {
-      //   _thresholdOld = _threshold;
-      //   _threshold = newPoint.threshold;
-      //   _thresholdIsUpdated = true;
-      // }
-      // if (_h != newPoint.h) {
-      //   _hOld = _h;
-      //   _h = newPoint.h;
-      //   _hIsUpdated = true;
-      // }
-      // if (_a != newPoint.a) {
-      //   _aOld = _a;
-      //   _a = newPoint.a;
-      //   _aIsUpdated = true;
-      // }
-      // if (_v != newPoint.v) {
-      //   _vOld = _v;
-      //   _v = newPoint.v;
-      //   _vIsUpdated = true;
-      // }
-  //     if (_comment != newPoint.comment) {
-  //       _commentOld = '$_comment';
-  //       _comment = '${newPoint.comment}';
-  //       _commentIsUpdated = true;
-  //     }
-  //   }
-  // }
-  ///
-  void setAct(String value) {
-    _act = value.split(',').map((vStr) => int.parse(vStr)).toList();
+  void setTrip(String value) {
+    _trip = value.split(',').map((vStr) => int.parse(vStr)).toList();
   }
   ///
   void setNomConst(int value) {
     _nomConst = value;
   }
   ///
-  void setNomTag(String value) {
-    _nomTag = value;
+  void setNomPoint(String value) {
+    _nomPoint = value;
+  }
+  ///
+  void setThreshol(Map<String, double> value) {
+    _threshold = value;
+  }
+  ///
+  void setIntegralFactor(String value) {
+    _integralFactor = double.tryParse(value);
   }
   ///
   @override
   String toString() {
-    if (_act != null) {
-      return 'act: $_act';
+    if (_trip != null) {
+      return 'trip: $_trip';
     } else if (_nomConst != null) {
-      return 'nom: $_nomConst';
-    } else if (_nomTag != null) {
-      return 'nom: $_nomTag';
+      return 'nom: $_nomConst;  threshold: $_threshold;  integralFactor: $_integralFactor';
+    } else if (_nomPoint != null) {
+      return 'nom: $_nomPoint;\n\tthreshold: $_threshold;  integralFactor: $_integralFactor';
     }
     return '';
   }
