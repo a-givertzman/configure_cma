@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
           child: _buildMenuWidget(context),
         ),
         body: HomeBody(
-          users: _users,
           dsClient: _dsClient,
         ),
       ),

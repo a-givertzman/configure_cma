@@ -53,6 +53,7 @@ class S7Db {
       );
     });
     updateDbSize();
+    validateOffset();
   }
   ///
   S7Db.fromList(String name, List<String> list) : _name = name {
@@ -70,6 +71,7 @@ class S7Db {
     //   );
     // });
     updateDbSize();
+    validateOffset();
   }
   String get name => _name;
   String? get description => _description;
@@ -191,4 +193,69 @@ class S7Db {
       _size = newSize;
     }
   }
+  ///
+  /// Проверяет адресацию тегов с учетом их типа
+  void validateOffset() {
+    return;
+    int offset = 0;
+    int bit = 0;
+    S7PointMarked? prevPoint;
+    for (final entry in _points.entries) {
+      final point = entry.value;
+      if (point.v != null && point.v! > 0) {
+      } else {
+        if (prevPoint != null) {
+          final length = DsDataType.fromString(prevPoint.type).length;
+          if (prevPoint.type == 'Bool') {
+            bit = prevPoint.bit!;
+          }
+          offset += length;
+          if (point.offset != offset) {
+            final newPoint = S7PointMarked(point);
+            newPoint.setOffset("$offset");
+            point.update(newPoint);
+          }
+        }
+        prevPoint = point;
+      }
+    }
+  }
+}
+
+
+///
+/// Счетчик адреса для ParseConfigDb
+class DbOffset {
+  int _value;
+  int _bit;
+  bool _isBool = false;
+  int _length = 0;
+  ///
+  DbOffset({
+    int value = 0, 
+    int bit = 0,
+  }) : 
+    _value = value,
+    _bit = bit;
+  ///
+  add(String tagTypeName) {
+    final tagType = DsDataType.fromString('$tagTypeName');
+    _length = tagType.length;
+    if (_isBool && tagType == DsDataType.bool()) {
+      _bit++;
+    } else {
+      if (tagType == DsDataType.bool()) {
+        _isBool = true;
+      } else {
+        if (_isBool) {
+          _bit = 0;
+          _isBool = false;
+        }
+      }
+      _value += _length;
+    }
+  }
+  ///
+  int get value => _value - _length;
+  int get bit => _bit;
 }

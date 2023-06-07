@@ -1,4 +1,3 @@
-import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/core/entities/ds_config.dart';
 import 'package:configure_cma/domain/core/entities/network_operation_state.dart';
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
@@ -11,16 +10,13 @@ import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
 class HomeBody extends StatefulWidget {
-  final AppUserStacked _users;
   final DsClient? _dsClient;
   /// 
   /// Builds home body using current user
   const HomeBody({
     Key? key,
-    required AppUserStacked users,
     DsClient? dsClient,
   }) : 
-    _users = users,
     _dsClient = dsClient,
     super(key: key);
   ///
@@ -115,7 +111,7 @@ class _HomeBodyState extends State<HomeBody> {
                   child: SelectFileWidget(
                     editable: true,
                     labelText: 'Path to DataServer config file',
-                    allowedExtensions: ['conf', 'cfg', 'json'],
+                    allowedExtensions: ['conf', 'cfg', 'json', 'yaml'],
                     onComplete: (path) {
                       if (_state.isSaving || _state.isLoading) {
                         return;

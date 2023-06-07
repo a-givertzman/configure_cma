@@ -29,7 +29,7 @@ class S7PointWidget extends StatefulWidget {
 
 ///
 class _S7PointWidgetState extends State<S7PointWidget> {
-  static const _debug = true;
+  static const _debug = false;
   ///
   @override
   Widget build(BuildContext context) {

@@ -9,9 +9,9 @@ import 'package:window_manager/window_manager.dart';
 
 void main() {
   debugRepaintRainbowEnabled = false;
-  WidgetsFlutterBinding.ensureInitialized();
   runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
       await windowManager.ensureInitialized();
       windowManager.waitUntilReadyToShow(
         WindowOptions(

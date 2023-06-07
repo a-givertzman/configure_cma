@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:configure_cma/domain/core/entities/s7_line.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:path/path.dart';
+import 'package:yaml/yaml.dart';
+import 'package:yaml_writer/yaml_writer.dart';
 
 class DSConfig {
+  static const _debug = false;
   late String? _path = null;
   late String? _cmaPath = null;
   late Map<String, dynamic> _config;
@@ -15,10 +19,9 @@ class DSConfig {
   Future<Map<String, S7Line>> read(String? path) {
     if (path != null) {
       _path = path;
-      final file = File(path);
-      return file.readAsString().then((value) {
+      return _readYaml(path).then((config) {
         // log(_debug, value);
-        _config = json.decode(value);
+        _config = config;
         if (_config.containsKey('data_source')) {
           final Map<String, dynamic> dataSource = _config['data_source'];
           if (dataSource.containsKey('lines')) {
@@ -36,11 +39,25 @@ class DSConfig {
     }
     return Future.value({});
   }
+  ///
+  Future<Map<String, dynamic>> _readYaml(String path) {
+      final file = File(path);
+      return file.readAsString().then((value) {
+        return (loadYaml(value) as YamlMap).toMap();
+      });
+  }
+  ///
+  // Future<Map<String, dynamic>> _readJson(String path) {
+  //     final file = File(path);
+  //     return file.readAsString().then((value) {
+  //       // log(_debug, value);
+  //       return json.decode(value);
+  //     });
+  // }
   /// Make a backup of the file
   Future<void> _backupFile(String path) async {
     final dir = dirname(path);
     final name = basename(path);
-    // final path = join(dir, 'confNew.json');
     final backupFile = File(path);
     if (backupFile.existsSync()) {
       final t = DateTime.now();
@@ -54,22 +71,28 @@ class DSConfig {
     if (path != null && path.isNotEmpty) {
       _config['data_source']['lines'] = lines;
       await _backupFile(path);
+      await _writeYaml(path,_config);
+    }
+  }
+  ///
+  Future<void> _writeYaml(String path, Map<String, dynamic> config) async {
+      final file = File(path);
+      if (!file.existsSync()) {
+        await file.create(recursive: true);
+      }
+      var yamlWriter = YAMLWriter(indentSize: 4);
+      final yamlDoc = yamlWriter.write(config);
+      log(_debug, "[DSConfig._writeYaml] yamlDoc: $yamlDoc");
+      await file.writeAsString(yamlDoc);
+  }  ///
+  Future<void> _writeJson(String path, Map<String, dynamic> config) async {
       final file = File(path);
       if (!file.existsSync()) {
         await file.create(recursive: true);
       }
       final encoder = new JsonEncoder.withIndent("    ");
-      final json = encoder.convert(
-        _config
-        // lines.map((key, line) {
-        //   return MapEntry(
-        //     key, 
-        //     line,
-        //   );
-        // })
-      );
-      await file.writeAsString(json);
-    }
+      final jsonDoc = encoder.convert(config);
+      await file.writeAsString(jsonDoc);
   }
   ///
   Future<void> writeCmaConfig({required String? cmaPath, required Map<String, S7Line> lines, bool backup = false}) async {
@@ -103,5 +126,31 @@ class DSConfig {
       final json = encoder.convert(alarmList);
       await file.writeAsString(json);
     }
+  }
+}
+
+
+extension YamlMapConverter on YamlMap {
+  ///
+  dynamic _convertNode(dynamic v) {
+    if (v is YamlMap) {
+      return (v).toMap();
+    }
+    else if (v is YamlList) {
+      var list = <dynamic>[];
+      v.forEach((e) { list.add(_convertNode(e)); });
+      return list;
+    }
+    else {
+      return v;
+    }
+  }
+  ///
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{};
+    this.nodes.forEach((k, v) {
+      map[(k as YamlScalar).value.toString()] = _convertNode(v.value);
+    });
+    return map;
   }
 }
