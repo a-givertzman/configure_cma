@@ -2,7 +2,6 @@ import 'package:configure_cma/domain/auth/app_user.dart';
 import 'package:configure_cma/domain/auth/app_user_stacked.dart';
 import 'package:configure_cma/domain/auth/authenticate.dart';
 import 'package:configure_cma/infrastructure/datasource/app_data_source.dart';
-import 'package:configure_cma/presentation/auth/sign_in/sign_in_page.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme_switch.dart';
 import 'package:configure_cma/presentation/home/home_page.dart';
 import 'package:flutter/material.dart';
@@ -68,18 +67,18 @@ class _AppWidgetState extends State<AppWidget> {
       initialRoute: '/homePage',
       routes: {
         '/homePage': (context) => HomePage(
-        dataSource: dataSource,
-        users: _appUserStacked,
-        themeSwitch: _themeSwitch,
-      ),        
-        '/signInPage': (context) => SignInPage(
-          auth: Authenticate(
-            user: AppUserSingle(
-              remote: dataSource.dataSet('app-user'),
-            ),
-          ),
+          dataSource: dataSource,
+          users: _appUserStacked,
           themeSwitch: _themeSwitch,
-        ),
+        ),        
+        // '/signInPage': (context) => SignInPage(
+        //   auth: Authenticate(
+        //     user: AppUserSingle(
+        //       remote: dataSource.dataSet('app-user'),
+        //     ),
+        //   ),
+        //   themeSwitch: _themeSwitch,
+        // ),
       },
       theme: _themeSwitch.themeData,
       // darkTheme: appThemes[AppTheme.dark],
