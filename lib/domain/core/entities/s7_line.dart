@@ -40,17 +40,7 @@ class S7Line {
                 "data": db.points.map((pointKey, point) {
                   return MapEntry(
                     point.name, 
-                    {
-                      "type": point.type,
-                      "offset": point.offset,
-                      if (point.bit != null) "bit": point.bit,
-                      if (point.threshold != null) "threshHold": point.threshold,
-                      if (point.h != null) "h": point.h,
-                      if (point.a != null) "a": point.a,
-                      if (point.fr != null && point.fr!.isNotEmpty) "fr": point.fr?.toJson(),
-                      if (point.v != null) "v": point.v,
-                      if (point.comment != null) "comment": point.comment,
-                    }
+                    point.toMap(),
                   );
                 }),
               }

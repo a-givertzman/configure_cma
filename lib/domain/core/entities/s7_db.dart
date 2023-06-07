@@ -6,7 +6,7 @@ import 'package:configure_cma/domain/core/error/failure.dart';
 import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/domain/core/result/result.dart';
 import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
-import 'package:configure_cma/presentation/home/widgets/s7_point_marked.dart';
+import 'package:configure_cma/domain/core/entities/s7_point_marked.dart';
 
 class S7Db {
   static const _debug = true;

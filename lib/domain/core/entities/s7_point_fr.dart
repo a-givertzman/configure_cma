@@ -21,27 +21,30 @@ class S7PointFr {
     _threshold = threshold,
     _integralFactor = integralFactor;
   ///
-  S7PointFr.fromMap(Map? config) {
+  factory S7PointFr.fromMap(Map? config) {
     if (config != null) {
       log(_debug, '[$S7PointFr.fromMap] fr config: ', config);
-      _trip = (config['trip'] as List<dynamic>?)?.map((e) => int.parse('$e')).toList();
       final nom = config['nom'];
       if (nom != null) {
         log(_debug, '[$S7PointFr.fromMap] fr nom: ', nom);
         if (nom is int) {
           log(_debug, '[$S7PointFr.fromMap] fr nom is int: ', nom);
-          _nomConst = nom;
         } else if (nom is String) {
           log(_debug, '[$S7PointFr.fromMap] fr nom: is String ', nom);
-          _nomPoint = nom;
         } else {
           log(_debug, '[$S7PointFr.fromMap] Uncnown type of nom: ', nom);
         }
       }
       log(_debug, '[$S7PointFr.fromMap] config["threshold"]: ', config['threshold']);
-      _threshold = config['threshold'] != null ? Map<String, double>.from(config['threshold']) : null;
-      _integralFactor = config['integralFactor'];
+      return S7PointFr(
+        trip: (config['trip'] as List<dynamic>?)?.map((e) => int.parse('$e')).toList(),
+        nomConst: (nom != null && nom is int) ? nom : null,
+        nomPoint: (nom != null && nom is String) ? nom : null,
+        threshold: config['threshold'] != null ? Map<String, double>.from(config['threshold']) : null,
+        integralFactor: config['integralFactor']
+      );
     }
+    return S7PointFr();
   }
   ///
   bool get isEmpty {

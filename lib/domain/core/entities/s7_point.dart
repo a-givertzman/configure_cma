@@ -73,6 +73,19 @@ class S7Point {
     _v = config['v'];
     _comment = config['comment'];
   }
+  Map<String, dynamic> toMap() {
+    return {
+      "type": _type,
+      "offset": _offset,
+      if (_bit != null) "bit": _bit,
+      if (_threshold != null) "threshHold": _threshold,
+      if (_h != null) "h": _h,
+      if (_a != null) "a": _a,
+      if (_fr != null && _fr!.isNotEmpty) "fr": _fr?.toJson(),
+      if (_v != null) "v": _v,
+      if (_comment != null) "comment": _comment,
+    };
+  }
   ///
   @override
   bool operator ==(Object other) =>

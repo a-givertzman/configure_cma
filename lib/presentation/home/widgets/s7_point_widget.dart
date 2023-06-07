@@ -3,7 +3,7 @@ import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/home/widgets/point_row_widget.dart';
 import 'package:configure_cma/presentation/home/widgets/row_widget.dart';
-import 'package:configure_cma/presentation/home/widgets/s7_point_marked.dart';
+import 'package:configure_cma/domain/core/entities/s7_point_marked.dart';
 import 'package:flutter/material.dart';
 
 class S7PointWidget extends StatefulWidget {
