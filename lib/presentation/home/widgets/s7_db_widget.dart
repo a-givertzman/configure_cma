@@ -1,5 +1,6 @@
 
 import 'package:configure_cma/domain/core/entities/s7_db.dart';
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/infrastructure/stream/ds_client.dart';
 import 'package:configure_cma/presentation/core/theme/app_theme.dart';
 import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
@@ -25,7 +26,7 @@ class S7DbWidget extends StatefulWidget {
 
 //
 class _S7DbWidgetState extends State<S7DbWidget> {
-  // static const _debug = true;
+  static const _debug = true;
   ///
   @override
   Widget build(BuildContext context) {
@@ -130,6 +131,10 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               points: db.points,
               newPoints: db.newPoints,
               dsClient: widget.dsClient,
+              onChanged: (value) {
+                log(_debug, '[$_S7DbWidgetState.build] S7PointWidget.onChanged value: $value');
+                db.validateOffset();
+              },
             ),
           ],
         );

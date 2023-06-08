@@ -16,6 +16,7 @@ class PointRowWidget extends StatefulWidget {
   final S7Point? newPoint;
   final Map<String, int>? _flex;
   final DsClient? dsClient;
+  final void Function(String)? onChanged;
   ///
   PointRowWidget({
     Key? key,
@@ -25,6 +26,7 @@ class PointRowWidget extends StatefulWidget {
     this.newPoint,
     Map<String, int>? flex,
     this.dsClient,
+    this.onChanged,
   }) : 
     _point = point,
     _flex = flex,
@@ -44,14 +46,16 @@ class _PointRowWidgetState extends State<PointRowWidget> {
     final flex = widget._flex;
     Color? color;
     Color? isUpdatedColor = Colors.yellow.withAlpha(200);
-    if (widget._point.isNew) {
+    Color? errorColor = Theme.of(context).stateColors.error;
+    final point = widget._point;
+    if (point.isNew) {
       color = Theme.of(context).stateColors.on.withAlpha(100);
-    } else if (widget._point.isDeleted) {
+    } else if (point.isDeleted) {
       color = Theme.of(context).stateColors.error.withAlpha(100);
     } else {
       color = widget._color;
     }
-    if (widget._point.isSelected) {
+    if (point.isSelected) {
       color = Color.alphaBlend(
         color ?? Colors.transparent, 
         Theme.of(context).colorScheme.primary.withOpacity(0.5)
@@ -60,7 +64,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
     return InkWell(
       onTap: () {
         setState(() {
-          widget._point.setIsSelected(value: !widget._point.isSelected);
+          point.setIsSelected(value: !point.isSelected);
         });
       },
       child: Row(
@@ -70,7 +74,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
             child: RepaintBoundary(
               child: TextIndicator(
                 textScaleFactor: 0.8,
-                stream: _valueStream(),
+                stream: _valueStream(widget.dsClient, point),
               ),
             ),
           ),
@@ -78,93 +82,129 @@ class _PointRowWidgetState extends State<PointRowWidget> {
             flex: flex != null ? flex['v'] ?? 1 : 1,
             color: color,
             borderColor: widget.borderColor,
-            data: widget._point.v != null ? widget._point.v! > 0 ? '●' : '' : '',
-            onChanged: (value) => widget._point.setV(value.isEmpty ? '' : '1'),
-            tooltip: widget.newPoint != null ? (widget.newPoint!.v != widget._point.v ? '${widget.newPoint!.v}' : '') : '',
+            data: point.v != null ? point.v! > 0 ? '●' : '' : '',
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setV(value.isEmpty ? '' : '1');
+            },
+            tooltip: widget.newPoint != null ? (widget.newPoint!.v != point.v ? '${widget.newPoint!.v}' : '') : '',
           ),
           CellWidget<String>(
             flex: flex != null ? flex['name'] ?? 1 : 1,
             color: color,
             borderColor: widget.borderColor,
-            data: widget._point.name,
-            onChanged: (value) => widget._point.setName(value),
-            tooltip: widget.newPoint != null ? (widget.newPoint!.name != widget._point.name ? '${widget.newPoint!.name}' : '') : '',
+            data: point.name,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setName(value);
+            },
+            tooltip: widget.newPoint != null ? (widget.newPoint!.name != point.name ? '${widget.newPoint!.name}' : '') : '',
           ),
           CellWidget<String>(
             flex: flex != null ? flex['type'] ?? 1 : 1,
-            color: widget._point.typeIsUpdated ? isUpdatedColor : color,
+            color: point.typeIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.type,
-            onChanged: (value) => widget._point.setType(value),
-            tooltip: widget._point.typeIsUpdated ? 'before: ${widget._point.typeOld}' : null,
+            data: point.type,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setType(value);
+            },
+            tooltip: point.typeIsUpdated ? 'before: ${point.typeOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['offset'] ?? 1 : 1,
-            color: widget._point.offsetIsUpdated ? isUpdatedColor : color,
+            color: point.offsetError ? errorColor : point.offsetIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.offset,
-            onChanged: (value) => widget._point.setOffset(value),
-            tooltip: widget._point.offsetIsUpdated ? 'before: ${widget._point.offsetOld}' : null,
+            data: point.offset,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setOffset(value);
+            },
+            tooltip: point.offsetIsUpdated ? 'before: ${point.offsetOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['bit'] ?? 1 : 1,
-            color: widget._point.bitIsUpdated ? isUpdatedColor : color,
+            color: point.bitError ? errorColor : point.bitIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.bit,
-            onChanged: (value) => widget._point.setBit(value),
-            tooltip: widget._point.bitIsUpdated ? 'before: ${widget._point.bitOld}' : null,
+            data: point.bit,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setBit(value);
+            },
+            tooltip: point.bitIsUpdated ? 'before: ${point.bitOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['threshold'] ?? 1 : 1,
-            color: widget._point.thresholdIsUpdated ? isUpdatedColor : color,
+            color: point.thresholdIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.threshold,
-            onChanged: (value) => widget._point.setThreshold(value),
-            tooltip: widget._point.thresholdIsUpdated ? 'before: ${widget._point.thresholdOld}' : null,
+            data: point.threshold,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setThreshold(value);
+            },
+            tooltip: point.thresholdIsUpdated ? 'before: ${point.thresholdOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['h'] ?? 1 : 1,
-            color: widget._point.hIsUpdated ? isUpdatedColor : color,
+            color: point.hIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.h,
-            onChanged: (value) => widget._point.setH(value),
-            tooltip: widget._point.hIsUpdated ? 'before: ${widget._point.hOld}' : null,
+            data: point.h,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setH(value);
+            },
+            tooltip: point.hIsUpdated ? 'before: ${point.hOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['a'] ?? 1 : 1,
-            color: widget._point.aIsUpdated ? isUpdatedColor : color,
+            color: point.aIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.a,
-            onChanged: (value) => widget._point.setA(value),
-            tooltip: widget._point.aIsUpdated ? 'before: ${widget._point.aOld}' : null,
+            data: point.a,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setA(value);
+            },
+            tooltip: point.aIsUpdated ? 'before: ${point.aOld}' : null,
           ),
           CellWidget<S7PointFr?>(
             flex: flex != null ? flex['fr'] ?? 1 : 1,
-            color: widget._point.frIsUpdated ? isUpdatedColor : color,
+            color: point.frIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.fr,
-            // onChanged: (value) => widget._point.setFr(value),
-            tooltip: widget._point.frIsUpdated ? 'before: ${widget._point.frOld}' : null,
+            data: point.fr,
+            // onChanged: (value) {
+            //} point.setFr(value),
+            tooltip: point.frIsUpdated ? 'before: ${point.frOld}' : null,
           ),
           CellWidget<String>(
             flex: flex != null ? flex['comment'] ?? 1 : 1,
-            color: widget._point.commentIsUpdated ? isUpdatedColor : color,
+            color: point.commentIsUpdated ? isUpdatedColor : color,
             borderColor: widget.borderColor,
-            data: widget._point.comment,
-            onChanged: (value) => widget._point.setComment(value),
-            tooltip: widget._point.commentIsUpdated ? 'before: ${widget._point.commentOld}' : null,
+            data: point.comment,
+            onChanged: (value) {
+              _onValueChanged(value);
+              point.setComment(value);
+            },
+            tooltip: point.commentIsUpdated ? 'before: ${point.commentOld}' : null,
           ),
         ],
       ),
     );
   }
   ///
-  Stream<DsDataPoint<num>>? _valueStream() {
-    if (widget._point.type == 'Int') {
-      return widget.dsClient?.streamInt(widget._point.name);
+  /// if any of cell value was changed
+  void _onValueChanged(String value) {
+    final onChanged = widget.onChanged;
+    if (onChanged != null) {
+      onChanged(value);
     }
-    if (widget._point.type == 'Real') {
-      return widget.dsClient?.streamReal(widget._point.name);
+  }
+  ///
+  Stream<DsDataPoint<num>>? _valueStream(DsClient? dsClient, S7PointMarked point) {
+    if (point.type == 'Int') {
+      return dsClient?.streamInt(point.name);
+    }
+    if (point.type == 'Real') {
+      return dsClient?.streamReal(point.name);
     }
     return null;
   }

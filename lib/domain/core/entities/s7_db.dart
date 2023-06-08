@@ -196,28 +196,32 @@ class S7Db {
   ///
   /// Проверяет адресацию тегов с учетом их типа
   void validateOffset() {
-    return;
-    int offset = 0;
-    int bit = 0;
-    S7PointMarked? prevPoint;
+    log(_debug, '[S7Db.validateOffset]');
+    final dbAddress = DbAddress(value: 0, bit: 0);
     for (final entry in _points.entries) {
       final point = entry.value;
-      if (point.v != null && point.v! > 0) {
+      final newPoint = S7PointMarked(point);
+      dbAddress.add(point);
+      if (point.offset != dbAddress.offset) {
+        // newPoint.setOffset("${dbAddress.offset}");
+        log(_debug, '[S7Db.validateOffset] ${point.name}: offset error: ${point.offset} != ${dbAddress.offset}');
+        newPoint.setOffsetError(true);
       } else {
-        if (prevPoint != null) {
-          final length = DsDataType.fromString(prevPoint.type).length;
-          if (prevPoint.type == 'Bool') {
-            bit = prevPoint.bit!;
-          }
-          offset += length;
-          if (point.offset != offset) {
-            final newPoint = S7PointMarked(point);
-            newPoint.setOffset("$offset");
-            point.update(newPoint);
-          }
-        }
-        prevPoint = point;
+        newPoint.setOffsetError(false);
       }
+      if (point.bit != dbAddress.bit) {
+        final newPoint = S7PointMarked(point);
+        log(_debug, '[S7Db.validateOffset] ${point.name}: bit error: ${point.bit} != ${dbAddress.bit}');
+        if ((dbAddress.bit ?? 0) > 0) {
+          // newPoint.setBit("${dbAddress.bit}");
+        } else {
+          // newPoint.setBit(null);
+        }
+        newPoint.setBitError(true);
+      } else {
+        newPoint.setBitError(false);
+      }
+      point.update(newPoint);
     }
   }
 }
@@ -225,37 +229,49 @@ class S7Db {
 
 ///
 /// Счетчик адреса для ParseConfigDb
-class DbOffset {
-  int _value;
+class DbAddress {
+  String _name = '';
+  int _offset;
   int _bit;
   bool _isBool = false;
   int _length = 0;
   ///
-  DbOffset({
+  DbAddress({
     int value = 0, 
     int bit = 0,
   }) : 
-    _value = value,
+    _offset = value,
     _bit = bit;
   ///
-  add(String tagTypeName) {
-    final tagType = DsDataType.fromString('$tagTypeName');
-    _length = tagType.length;
-    if (_isBool && tagType == DsDataType.bool()) {
-      _bit++;
+  add(S7PointMarked point) {
+    if (point.v != null && point.v! > 0) {
     } else {
-      if (tagType == DsDataType.bool()) {
-        _isBool = true;
+      final tagType = DsDataType.fromString(point.type);
+      _length = tagType.length;
+      if (_isBool && tagType == DsDataType.bool() && _pointNamePath(_name) == _pointNamePath(point.name)) {
+        _bit++;
       } else {
-        if (_isBool) {
-          _bit = 0;
-          _isBool = false;
+        if (tagType == DsDataType.bool()) {
+          _isBool = true;
+        } else {
+          if (_isBool) {
+            _bit = 0;
+            _isBool = false;
+          }
         }
+        _offset += _length;
       }
-      _value += _length;
     }
+    _name = point.name; 
   }
   ///
-  int get value => _value - _length;
-  int get bit => _bit;
+  String _pointNamePath(String name) {
+    final parts = name.split('.'); 
+    // _name = parts.last;
+    return parts.take(parts.length - 1).join('.');
+  }
+  ///
+  int get offset => _offset - _length;
+  ///
+  int? get bit => _isBool ? _bit : null;
 }

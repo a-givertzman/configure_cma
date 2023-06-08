@@ -62,8 +62,8 @@ class DsDataType {
     } else if (lvalue == 'date_and_time') {
       return {'name': DsDataType.dateAndTime().name, 'length': DsDataType.dateAndTime().length,};
     } else {
-      throw Failure.connection(
-        message: 'Ошибка в методе $DsDataType._extract: неизвестный тип данных $value',
+      throw Failure.convertion(
+        message: 'Ошибка в методе $DsDataType._extract: неизвестный тип данных "$value"',
         stackTrace: StackTrace.current,
       );
     }

@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   static const _debug = true;
   final AppUserStacked _users;
   final AppThemeSwitch _themeSwitch;
-  late DsClient _dsClient;
+  late DsClient? _dsClient = null;
   // late List<String> _statusList;
   // late ViewFilter _viewFilter;
   ///
@@ -58,10 +58,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _dsClient = DsClientReal(
-      ip: AppCommunicationSettings.dsClientIp, 
-      port: AppCommunicationSettings.dsClientPort,
-      );    
+    // _dsClient = DsClientReal(
+    //   ip: AppCommunicationSettings.dsClientIp, 
+    //   port: AppCommunicationSettings.dsClientPort,
+    // );
   }
   ///
   @override

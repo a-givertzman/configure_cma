@@ -1,3 +1,4 @@
+import 'package:configure_cma/domain/core/log/log.dart';
 import 'package:configure_cma/settings/common_settings.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class CellWidget<T> extends StatefulWidget {
 
 ///
 class _CellWidgetState<T> extends State<CellWidget<T>> {
-  // static const _debug = true;
+  static const _debug = true;
   final TextEditingController _editingController = TextEditingController();
   bool _isEditing = false;
   ///
@@ -102,6 +103,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
   void _onValueChanged(String value) {
     final onChacnged = widget._onChanged;
     if (onChacnged != null) {
+      log(_debug, '[$runtimeType._onValueChanged] value $value');
       onChacnged(value);
     }
   }

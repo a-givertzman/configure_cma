@@ -33,6 +33,8 @@ class S7Point {
   late bool _frIsUpdated = false;
   late bool _vIsUpdated = false;
   late bool _commentIsUpdated = false;
+  late bool _offsetError = false;
+  late bool _bitError = false;
   ///
   S7Point({
     required String name, 
@@ -134,7 +136,9 @@ class S7Point {
   bool get aIsUpdated => _aIsUpdated;
   bool get frIsUpdated => _frIsUpdated;
   bool get vIsUpdated => _vIsUpdated;
-  bool get commentIsUpdated => _commentIsUpdated  ;
+  bool get commentIsUpdated => _commentIsUpdated;
+  bool get offsetError => _offsetError;
+  bool get bitError => _bitError;
   ///
   void update(S7Point? newPoint) {
     if (newPoint != null) {
@@ -153,6 +157,13 @@ class S7Point {
         _bit = newPoint.bit;
         _bitIsUpdated = true;
       }
+      if (_bitError != newPoint.bitError) {
+        _bitError = newPoint.bitError;
+      }
+      if (_offsetError != newPoint.offsetError) {
+        _offsetError = newPoint.offsetError;
+      }
+
       // if (_threshold != newPoint.threshold) {
       //   _thresholdOld = _threshold;
       //   _threshold = newPoint.threshold;
@@ -198,9 +209,14 @@ class S7Point {
   }
   ///
   Result<int> setBit(String? value) {
-    final result = _parseInt(value);
-    _bit = result.data;
-    return result;
+    if (value != null && value.isNotEmpty) {
+      final result = _parseInt(value);
+      _bit = result.data;
+      return result;
+    } else {
+      _bit = null;
+      return Result<int>(data: 0);
+    }
   }
   ///
   Result<int> setThreshold(String? value) {
@@ -250,6 +266,14 @@ class S7Point {
         ),
       );
     }
+  }
+  ///
+  void setOffsetError(bool error) {
+    _offsetError = error;
+  }
+  ///
+  void setBitError(bool error) {
+    _bitError = error;
   }
   ///
   @override

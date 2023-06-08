@@ -2,35 +2,44 @@ import 'package:configure_cma/presentation/home/widgets/cell_widget.dart';
 import 'package:flutter/material.dart';
 
 class RowWidget extends StatelessWidget {
+  final List<RowWidgetItem> items;
   final Color? color;
   final Color borderColor;
-  final List values;
-  final List<int?> flex;
-  final List<String?>? tooltips;
   const RowWidget({
     super.key,
+    required this.items,
     required this.color,
     required this.borderColor,
-    required this.values,
-    required this.flex,
-    this.tooltips,
   });
   ///
   @override
   Widget build(BuildContext context) {
-    int index = -1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: values.map((value) {
-        index++;
+      children: items.map((item) {
         return CellWidget(
-          flex: flex[index] ?? 1,
-          tooltip: tooltips != null ? ((index < tooltips!.length) ? tooltips![index] : null) : null,
+          data: item.value,
+          flex: item.flex ?? 1,
+          tooltip: item.tooltip,
           color: color,
           borderColor: borderColor,
-          data: value,
+          onChanged: item.onChanged,
         );
       },).toList(),
     );
   }
+}
+
+
+class RowWidgetItem {
+  final dynamic value;
+  final int? flex;
+  final String? tooltip;
+  final void Function(String)? onChanged;
+  const RowWidgetItem({
+    required this.value,
+    required this.flex,
+    this.tooltip,
+    this.onChanged,
+  });  
 }

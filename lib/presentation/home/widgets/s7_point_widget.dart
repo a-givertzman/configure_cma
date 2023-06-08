@@ -11,6 +11,7 @@ class S7PointWidget extends StatefulWidget {
   final Map<String, S7Point>? _newPoints;
   final Map<String, int>? _flex;
   final DsClient? dsClient;
+  final void Function(String)? onChanged;
   ///
   S7PointWidget({
     Key? key,
@@ -18,6 +19,7 @@ class S7PointWidget extends StatefulWidget {
     Map<String, S7Point>? newPoints,
     Map<String, int>? flex,
     this.dsClient,
+    this.onChanged,
   }) : 
     _newPoints = newPoints,
     _flex = flex,
@@ -52,20 +54,40 @@ class _S7PointWidgetState extends State<S7PointWidget> {
         RowWidget(
           color: color,
           borderColor: borderColor,
-          values: ['value', 'v', 'name', 'type', 'offset', 'bit', 'threshold', 'h', 'a', 'fr', 'comment'],
-          flex: [flex['value']!, flex['v']!, flex['name']!, flex['type']!, flex['offset']!, flex['bit']!, flex['threshold']!, flex['h']!, flex['a']!, flex['fr']!, flex['comment']!],
-          tooltips: [
-            'Текуще значение тега в контроллере',
-            'Виртуальный сигнал, в контроллере отсутствует, используется в DataServer для диагностики и математики',
-            'Имя тега, читается из конфигурации контроллера',
-            'Тип тэга, читается из конфигурации контроллера',
-            'Адрес тэга, читается из конфигурации контроллера',
-            'Номер бита для тэгов типа Bool, читается из конфигурации контроллера',
-            'Threshold - Порог нечувствительности тэга',
-            'Атрибут записи в историю, активируется если 1, отключается если не указан',
-            'Класс аварии, активируется если от 1 до 15, отключается если не указан',
-            'Регистратор аварий \n{"act": [1]} - для запуска по конкретному значению, \n{"nom": 50} - для запуска по изменению с мертвой зоной обратно-пропорциональной проценту от номинала',
-            'Комментарий, может читаться из конфигурации контроллера, если указан',
+          items: [
+            RowWidgetItem(value: 'value', flex: flex['value'], 
+              tooltip: 'Текуще значение тега в контроллере',
+            ),
+            RowWidgetItem(value: 'v', flex: flex['v'], 
+              tooltip: 'Виртуальный сигнал, в контроллере отсутствует, используется в DataServer для диагностики и математики',
+            ),
+            RowWidgetItem(value: 'name', flex: flex['name'], 
+              tooltip: 'Имя тега, читается из конфигурации контроллера',
+            ),
+            RowWidgetItem(value: 'type', flex: flex['type'], 
+              tooltip: 'Тип тэга, читается из конфигурации контроллера',
+            ),
+            RowWidgetItem(value: 'offset', flex: flex['offset'], 
+              tooltip: 'Адрес тэга, читается из конфигурации контроллера',
+            ),
+            RowWidgetItem(value: 'bit', flex: flex['bit'], 
+              tooltip: 'Номер бита для тэгов типа Bool, читается из конфигурации контроллера',
+            ),
+            RowWidgetItem(value: 'threshold', flex: flex['threshold'], 
+              tooltip: 'Threshold - Порог нечувствительности тэга',
+            ),
+            RowWidgetItem(value: 'h', flex: flex['h'], 
+              tooltip: 'Атрибут записи в историю, активируется если 1, отключается если не указан',
+            ),
+            RowWidgetItem(value: 'a', flex: flex['a'], 
+              tooltip: 'Класс аварии, активируется если от 1 до 15, отключается если не указан',
+            ),
+            RowWidgetItem(value: 'fr', flex: flex['fr'], 
+              tooltip: 'Регистратор аварий \n{"act": [1]} - для запуска по конкретному значению, \n{"nom": 50} - для запуска по изменению с мертвой зоной обратно-пропорциональной проценту от номинала',
+            ),
+            RowWidgetItem(value: 'comment', flex: flex['comment'], 
+              tooltip: 'Комментарий, может читаться из конфигурации контроллера, если указан',
+            ),
           ],
         ),
         ListView.builder(
@@ -85,6 +107,7 @@ class _S7PointWidgetState extends State<S7PointWidget> {
                 newPoint: newPoint,
                 flex: widget._flex,
                 dsClient: widget.dsClient,
+                onChanged: widget.onChanged,
               );
           }),
         ),
