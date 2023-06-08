@@ -157,13 +157,6 @@ class S7Point {
         _bit = newPoint.bit;
         _bitIsUpdated = true;
       }
-      if (_bitError != newPoint.bitError) {
-        _bitError = newPoint.bitError;
-      }
-      if (_offsetError != newPoint.offsetError) {
-        _offsetError = newPoint.offsetError;
-      }
-
       // if (_threshold != newPoint.threshold) {
       //   _thresholdOld = _threshold;
       //   _threshold = newPoint.threshold;
@@ -268,12 +261,12 @@ class S7Point {
     }
   }
   ///
-  void setOffsetError(bool error) {
-    _offsetError = error;
+  void setOffsetError(bool value) {
+    _offsetError = value;
   }
   ///
-  void setBitError(bool error) {
-    _bitError = error;
+  void setBitError(bool value) {
+    _bitError = value;
   }
   ///
   @override

@@ -8,6 +8,7 @@ class CellWidget<T> extends StatefulWidget {
   final Color? _color;
   final Color _borderColor;
   final void Function(String value)? _onChanged;
+  final void Function(String value)? _onComplete;
   final bool _readOnly;
   final String _tooltip;
   ///
@@ -18,6 +19,7 @@ class CellWidget<T> extends StatefulWidget {
     Color? color,
     Color? borderColor,
     void Function(String value)? onChanged,
+    void Function(String value)? onComplete,
     bool readOnly = false,
     String? tooltip,
   }) : 
@@ -26,6 +28,7 @@ class CellWidget<T> extends StatefulWidget {
     _color = color,
     _borderColor = borderColor ?? Colors.white10,
     _onChanged = onChanged,
+    _onComplete = onComplete,
     _readOnly = readOnly,
     _tooltip = tooltip ?? '',
     super(key: key);
@@ -82,9 +85,7 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
           onTapOutside: (event) {
             setState(() {_isEditing = false;});
           },
-          onEditingComplete: () {
-            setState(() {_isEditing = false;});
-          },
+          onEditingComplete: _onValueEditingComplete,
         ),
       );
     } else { 
@@ -103,8 +104,17 @@ class _CellWidgetState<T> extends State<CellWidget<T>> {
   void _onValueChanged(String value) {
     final onChacnged = widget._onChanged;
     if (onChacnged != null) {
-      log(_debug, '[$runtimeType._onValueChanged] value $value');
+      // log(_debug, '[$runtimeType._onValueChanged] value $value');
       onChacnged(value);
+    }
+  }
+  ///
+  void _onValueEditingComplete() {
+    setState(() {_isEditing = false;});
+    final onComplete = widget._onComplete;
+    if (onComplete != null) {
+      log(_debug, '[$runtimeType._onValueEditingComplete] value ${_editingController.text}');
+      onComplete(_editingController.text);
     }
   }
 }

@@ -205,23 +205,22 @@ class S7Db {
       if (point.offset != dbAddress.offset) {
         // newPoint.setOffset("${dbAddress.offset}");
         log(_debug, '[S7Db.validateOffset] ${point.name}: offset error: ${point.offset} != ${dbAddress.offset}');
-        newPoint.setOffsetError(true);
+        point.setOffsetError(true);
       } else {
-        newPoint.setOffsetError(false);
+        point.setOffsetError(false);
       }
       if (point.bit != dbAddress.bit) {
-        final newPoint = S7PointMarked(point);
         log(_debug, '[S7Db.validateOffset] ${point.name}: bit error: ${point.bit} != ${dbAddress.bit}');
         if ((dbAddress.bit ?? 0) > 0) {
           // newPoint.setBit("${dbAddress.bit}");
         } else {
           // newPoint.setBit(null);
         }
-        newPoint.setBitError(true);
+        point.setBitError(true);
       } else {
-        newPoint.setBitError(false);
+        point.setBitError(false);
       }
-      point.update(newPoint);
+      // point.update(newPoint);
     }
   }
 }

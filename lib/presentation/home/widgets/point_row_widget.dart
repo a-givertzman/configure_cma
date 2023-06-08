@@ -45,6 +45,7 @@ class _PointRowWidgetState extends State<PointRowWidget> {
   Widget build(BuildContext context) {
     final flex = widget._flex;
     Color? color;
+    Color? borderColor = widget.borderColor;
     Color? isUpdatedColor = Colors.yellow.withAlpha(200);
     Color? errorColor = Theme.of(context).stateColors.error;
     final point = widget._point;
@@ -81,95 +82,103 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           CellWidget<String>(
             flex: flex != null ? flex['v'] ?? 1 : 1,
             color: color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.v != null ? point.v! > 0 ? '●' : '' : '',
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setV(value.isEmpty ? '' : '1');
             },
+            onComplete: _onValueChanged,
             tooltip: widget.newPoint != null ? (widget.newPoint!.v != point.v ? '${widget.newPoint!.v}' : '') : '',
           ),
           CellWidget<String>(
             flex: flex != null ? flex['name'] ?? 1 : 1,
             color: color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.name,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setName(value);
             },
+            onComplete: _onValueChanged,
             tooltip: widget.newPoint != null ? (widget.newPoint!.name != point.name ? '${widget.newPoint!.name}' : '') : '',
           ),
           CellWidget<String>(
             flex: flex != null ? flex['type'] ?? 1 : 1,
             color: point.typeIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.type,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setType(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.typeIsUpdated ? 'before: ${point.typeOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['offset'] ?? 1 : 1,
-            color: point.offsetError ? errorColor : point.offsetIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            color: point.offsetIsUpdated ? isUpdatedColor : color,
+            borderColor: point.offsetError ? errorColor : borderColor,
             data: point.offset,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setOffset(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.offsetIsUpdated ? 'before: ${point.offsetOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['bit'] ?? 1 : 1,
-            color: point.bitError ? errorColor : point.bitIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            color: point.bitIsUpdated ? isUpdatedColor : color,
+            borderColor: point.bitError ? errorColor : borderColor,
             data: point.bit,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setBit(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.bitIsUpdated ? 'before: ${point.bitOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['threshold'] ?? 1 : 1,
             color: point.thresholdIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.threshold,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setThreshold(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.thresholdIsUpdated ? 'before: ${point.thresholdOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['h'] ?? 1 : 1,
             color: point.hIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.h,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setH(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.hIsUpdated ? 'before: ${point.hOld}' : null,
           ),
           CellWidget<int?>(
             flex: flex != null ? flex['a'] ?? 1 : 1,
             color: point.aIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.a,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setA(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.aIsUpdated ? 'before: ${point.aOld}' : null,
           ),
           CellWidget<S7PointFr?>(
             flex: flex != null ? flex['fr'] ?? 1 : 1,
             color: point.frIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.fr,
             // onChanged: (value) {
             //} point.setFr(value),
@@ -178,12 +187,13 @@ class _PointRowWidgetState extends State<PointRowWidget> {
           CellWidget<String>(
             flex: flex != null ? flex['comment'] ?? 1 : 1,
             color: point.commentIsUpdated ? isUpdatedColor : color,
-            borderColor: widget.borderColor,
+            borderColor: borderColor,
             data: point.comment,
             onChanged: (value) {
-              _onValueChanged(value);
+              // _onValueChanged(value);
               point.setComment(value);
             },
+            onComplete: _onValueChanged,
             tooltip: point.commentIsUpdated ? 'before: ${point.commentOld}' : null,
           ),
         ],

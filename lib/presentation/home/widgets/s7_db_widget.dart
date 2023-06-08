@@ -134,6 +134,7 @@ class _S7DbWidgetState extends State<S7DbWidget> {
               onChanged: (value) {
                 log(_debug, '[$_S7DbWidgetState.build] S7PointWidget.onChanged value: $value');
                 db.validateOffset();
+                setState(() {});
               },
             ),
           ],
