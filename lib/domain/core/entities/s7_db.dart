@@ -8,6 +8,7 @@ import 'package:configure_cma/domain/core/result/result.dart';
 import 'package:configure_cma/presentation/home/widgets/parse_config_db.dart';
 import 'package:configure_cma/domain/core/entities/s7_point_marked.dart';
 
+///
 class S7Db {
   static const _debug = true;
   final String _name;
@@ -16,12 +17,22 @@ class S7Db {
   late int _offset;
   late int _size;
   late int _delay;
-  late Map<String, S7PointMarked> _points;
+  late Map<String, S7PointMarked> _points = {};
   late Map<String, S7Point>? _newPoints = null;
   bool _isReading = false;
   late int? _sizeOld;
   bool _sizeIsUpdated = false;
-
+  String get name => _name;
+  String? get description => _description;
+  int get number => _number;
+  int get offset => _offset;
+  int get size => _size;
+  int get delay => _delay;
+  Map<String, S7PointMarked> get points => _points;
+  Map<String, S7Point>? get newPoints => _newPoints;
+  int? get sizeOld => _sizeOld;
+  bool get sizeIsUpdated => _sizeIsUpdated;
+  ///
   ///
   S7Db({
     required String name, 
@@ -46,14 +57,62 @@ class S7Db {
     _offset = config['offset'];
     _size = config['size'];
     _delay = config['delay'];
-    _points = config['data'].map<String, S7PointMarked>((key, value) {
-      return MapEntry<String, S7PointMarked>(
-        key, 
-        S7PointMarked(S7Point.fromMap(key, value as Map)),
-      );
-    });
+    Map<String, dynamic> configData = Map.from(config['data']);
+    while (configData.isNotEmpty) {
+      final result = findPointMinAddr(configData);
+      if (result.hasData) {
+        final key = result.data!;
+        _points[key] = S7PointMarked(S7Point.fromMap(key, configData[key] as Map));
+        configData.remove(key);
+      }
+    }
+    // _points = config['data'].map<String, S7PointMarked>((key, value) {
+    //   return MapEntry<String, S7PointMarked>(
+    //     key, 
+    //     S7PointMarked(S7Point.fromMap(key, value as Map)),
+    //   );
+    // });
     updateDbSize();
     validateOffset();
+  }
+  ///
+  Result<String> findPointMinAddr(Map<String, dynamic> conf) {
+    double min = double.maxFinite;
+    String pointKey = '';
+    for (final MapEntry<String, dynamic> entry in conf.entries) {
+      final key = entry.key;
+      final value = entry.value;
+      final current = _parseAddres(value);
+      if (current.hasData) {
+        if (current.data! < min) {
+          min = current.data!;
+          pointKey = key;
+        }
+      } else {
+        log(_debug, '[S7Line.findPointMinAddr] error: ${current.error}');
+      }
+    }
+    return pointKey.isNotEmpty 
+    ? Result(data: pointKey)
+    : Result(
+      error: Failure(
+        message: '[S7Line._parseAddres] parse double error in point config:\n$conf', stackTrace: StackTrace.current,
+      ),
+    );
+  }
+  ///
+  Result<double> _parseAddres(Map<String, dynamic> pointConf) {
+    final addr = double.tryParse('${pointConf['offset'] ?? 0}.${pointConf['offset'] ?? 0}');
+    if (addr != null) {
+      return Result(data: addr);
+    } else {
+      // log(_debug, '[S7Line._parseAddres] parse double error in point config:\n$pointConf');
+      return Result(
+        error: Failure(
+          message: '[S7Line._parseAddres] parse double error in point config:\n$pointConf', stackTrace: StackTrace.current,
+        ),
+      );
+    }
   }
   ///
   S7Db.fromList(String name, List<String> list) : _name = name {
@@ -73,16 +132,6 @@ class S7Db {
     updateDbSize();
     validateOffset();
   }
-  String get name => _name;
-  String? get description => _description;
-  int get number => _number;
-  int get offset => _offset;
-  int get size => _size;
-  int get delay => _delay;
-  Map<String, S7PointMarked> get points => _points;
-  Map<String, S7Point>? get newPoints => _newPoints;
-  int? get sizeOld => _sizeOld;
-  bool get sizeIsUpdated => _sizeIsUpdated;
   ///
   void clearNewPoints() {
     _newPoints = null;

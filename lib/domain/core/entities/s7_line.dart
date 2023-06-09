@@ -6,7 +6,7 @@ class S7Line {
   final String _name;
   late Map<String, S7Ied> _ieds;
   ///
-  S7Line(String name, Map<String, dynamic> config) : _name = name{
+  S7Line(String name, Map<String, dynamic> config) : _name = name {
     log(_debug, '[S7Line] ', name);
     // log(_debug, '\n[S7Line] config: ', config);
     _ieds = config.map<String, S7Ied>((key, value) {
@@ -16,7 +16,9 @@ class S7Line {
       );
     });
   }
+  ///
   String get name => _name;
+  ///
   Map<String, S7Ied> get ieds => _ieds;
   ///
   Map<String, dynamic> toJson() {
